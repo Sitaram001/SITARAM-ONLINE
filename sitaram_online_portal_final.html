@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>સીતારામ ઓનલાઇન - ગુજરાત સરકારી યોજનાઓ, ભરતી માર્ગદર્શિકા અને પીસી સ્ટોર</title>
+    <!-- Tailwind CSS with Container Queries Plugin for smart responsive text -->
+    <script src="https://cdn.tailwindcss.com?plugins=container-queries"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Vadodara:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- ✅ BACKEND DATA FILE — રોજ આ ફાઈલ અપડેટ કરો -->
+    <script src="sitaram_data.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Hind Vadodara', 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .web-watermark-bg {
+            position: relative;
+        }
+        .web-watermark-bg::before {
+            content: "";
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 290px;
+            height: 290px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" fill="none"><circle cx="160" cy="110" r="32" fill="%230c4a8a"/><path d="M160 155c-25 0-50 15-60 40-10 25-5 55 15 70s50 5 65-15c10-15 10-35 0-50l40-10c15-4 25-15 25-30v-5h-85z" fill="%230c4a8a"/><circle cx="145" cy="275" r="42" stroke="%230c4a8a" stroke-width="12" fill="none"/><circle cx="320" cy="65" r="32" fill="%23e11d24"/><path d="M320 105c-35 0-70 15-110 35l110 120c10 10 20 40 10 75l10-15c15-25 25-55 25-85v-100c0-15-15-30-30-30z" fill="%23e11d24"/><path d="M80 195 C 50 245, 430 295, 430 195 C 430 95, 50 145, 80 195" stroke="%237ec242" stroke-width="14" fill="none"/><path d="M90 355 Q 240 315 390 355" stroke="%23008cd6" stroke-width="8" fill="none"/></svg>');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.07; 
+            pointer-events: none;
+            z-index: 0;
+        }
+        .content-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .toast-show {
+            bottom: 30px;
+            opacity: 1;
+        }
+        .active-pill {
+            background-color: #dbeafe;
+            color: #1d4ed8;
+            border-radius: 20px;
+            margin: 6px;
+            transition: all 0.3s ease;
+        }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+
+        /* Modal positioning */
+        .app-modal { z-index: 50; position: fixed; }
+        .app-toast { z-index: 50; position: fixed; }
+
+        @media print {
+            body { background: white !important; color: black !important; }
+            body > *:not(#printArea) { display: none !important; }
+            #printArea { display: block !important; position: absolute; left: 0; top: 0; width: 100% !important; background: white !important; padding: 0 !important; margin: 0 !important; }
+            .no-print { display: none !important; }
+        }
+    </style>
+</head>
+<body class="antialiased text-gray-800">
+
+    <!-- MAIN APP WRAPPER -->
+    <div id="mainAppWrapper" class="min-h-screen flex flex-col content-container relative w-full @container max-w-7xl mx-auto">
+
+
+
+        <div class="min-h-full flex flex-col bg-slate-50 web-watermark-bg h-full overflow-y-auto no-scrollbar" id="scrollableAppArea">
+            
+            <header class="bg-gradient-to-r from-blue-800 via-indigo-900 to-blue-900 text-white shadow-lg sticky top-0 z-40 shrink-0 @md:px-4">
+                <div class="px-4 @md:px-6">
+                    <div class="flex items-center justify-between h-16 @md:h-20">
+                        <div class="flex items-center space-x-2.5 @md:space-x-4 cursor-pointer" onclick="switchTab('home')">
+                            <div class="bg-white p-1 @md:p-1.5 rounded-lg @md:rounded-xl shadow-md">
+                                <svg class="h-7 w-7 @md:h-10 @md:w-10" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="160" cy="110" r="32" fill="#0c4a8a"/>
+                                    <path d="M160 155c-25 0-50 15-60 40-10 25-5 55 15 70s50 5 65-15c10-15 10-35 0-50l40-10c15-4 25-15 25-30v-5h-85z" fill="#0c4a8a"/>
+                                    <circle cx="145" cy="275" r="42" stroke="#0c4a8a" stroke-width="12" fill="none"/>
+                                    <circle cx="320" cy="65" r="32" fill="#e11d24"/>
+                                    <path d="M320 105c-35 0-70 15-110 35l110 120c10 10 20 40 10 75l10-15c15-25 25-55 25-85v-100c0-15-15-30-30-30z" fill="#e11d24"/>
+                                    <path d="M80 195 C 50 245, 430 295, 430 195 C 430 95, 50 145, 80 195" stroke="#7ec242" stroke-width="14" fill="none"/>
+                                    <path d="M90 355 Q 240 315 390 355" stroke="#008cd6" stroke-width="8" fill="none"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="text-sm @md:text-2xl font-black tracking-tight block leading-none @md:mb-1">સીતારામ ઓનલાઇન</span>
+                                <span class="text-[8px] @md:text-xs uppercase text-blue-200 tracking-wider font-bold">ટેક સપોર્ટ અને સરકારી માર્ગદર્શિકા</span>
+                            </div>
+                        </div>
+                        <nav id="desktopNavbar" class="hidden @md:flex space-x-2">
+                            <button onclick="switchTab('home')" class="nav-tab px-3 py-1.5 @md:px-5 @md:py-2.5 rounded-lg text-xs @md:text-sm font-bold text-white bg-white/10 transition-all">હોમ</button>
+                            <button onclick="switchTab('bharti')" class="nav-tab px-3 py-1.5 @md:px-5 @md:py-2.5 rounded-lg text-xs @md:text-sm font-semibold text-blue-100 hover:text-white hover:bg-white/5 transition-all">સરકારી ભરતી</button>
+                            <button onclick="switchTab('catalog')" class="nav-tab px-3 py-1.5 @md:px-5 @md:py-2.5 rounded-lg text-xs @md:text-sm font-semibold text-blue-100 hover:text-white hover:bg-white/5 transition-all">સર્વિસ કેટેલોગ</button>
+                            <button onclick="switchTab('currentAffairs')" class="nav-tab px-3 py-1.5 @md:px-5 @md:py-2.5 rounded-lg text-xs @md:text-sm font-semibold text-blue-100 hover:text-white hover:bg-white/5 transition-all">કરંટ અફેર્સ & GK</button>
+                            <button onclick="switchTab('pcstore')" class="nav-tab px-3 py-1.5 @md:px-5 @md:py-2.5 rounded-lg text-xs @md:text-sm font-semibold text-blue-100 hover:text-white hover:bg-white/5 transition-all">લેપટોપ/PC</button>
+                        </nav>
+                        <div class="flex items-center space-x-3 @md:space-x-4">
+                            <button onclick="window.shareWebsite()" class="bg-white/10 hover:bg-white/20 p-2 @md:p-3 rounded-xl text-white transition-all flex items-center space-x-2 text-[11px] @md:text-sm font-bold hidden @md:flex">
+                                <i class="fa-solid fa-share-nodes"></i> <span class="hidden @md:inline">શેર કરો</span>
+                            </button>
+                            <button onclick="window.toggleMobileMenu()" class="@md:hidden bg-white/10 hover:bg-white/20 p-2 rounded-xl text-white transition-all focus:outline-none">
+                                <i class="fa-solid fa-bars text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="mobileMenu" class="hidden @md:hidden bg-indigo-950 border-t border-white/10 px-4 py-4 space-y-2">
+                    <button onclick="switchTab('home'); window.toggleMobileMenu()" class="mobile-nav-tab w-full text-left px-4 py-3 rounded-xl text-sm font-bold text-white bg-white/10 block">હોમ</button>
+                    <button onclick="switchTab('bharti'); window.toggleMobileMenu()" class="mobile-nav-tab w-full text-left px-4 py-3 rounded-xl text-sm font-semibold text-blue-100 hover:bg-white/5 block">સરકારી ભરતી</button>
+                    <button onclick="switchTab('catalog'); window.toggleMobileMenu()" class="mobile-nav-tab w-full text-left px-4 py-3 rounded-xl text-sm font-semibold text-blue-100 hover:bg-white/5 block">સર્વિસ કેટેલોગ</button>
+                    <button onclick="switchTab('currentAffairs'); window.toggleMobileMenu()" class="mobile-nav-tab w-full text-left px-4 py-3 rounded-xl text-sm font-semibold text-blue-100 hover:bg-white/5 block">કરંટ અફેર્સ & GK</button>
+                    <button onclick="switchTab('pcstore'); window.toggleMobileMenu()" class="mobile-nav-tab w-full text-left px-4 py-3 rounded-xl text-sm font-semibold text-blue-100 hover:bg-white/5 block">કોમ્પ્યુટર અને લેપટોપ સ્ટોર</button>
+                    <button onclick="window.openAboutModal(); window.toggleMobileMenu()" class="w-full text-left px-4 py-3 rounded-xl text-sm font-semibold text-yellow-400 hover:bg-white/5 block"><i class="fa-solid fa-circle-info mr-2"></i>આપણા વિશે & અસ્વીકરણ</button>
+                </div>
+            </header>
+
+            <main class="flex-1 w-full mx-auto px-4 py-6 @md:px-8 @md:py-10" id="mainContentBody">
+                <!-- Tab 1: Home Dashboard -->
+                <div id="homeTab" class="tab-content active space-y-6 @md:space-y-10">
+                    <div class="bg-gradient-to-br from-orange-500 to-amber-600 rounded-3xl text-white p-5 @md:p-10 shadow-xl relative overflow-hidden flex flex-col md:flex-row justify-between items-center">
+                        <div class="absolute right-0 bottom-0 opacity-10 transform translate-y-12 translate-x-12 pointer-events-none">
+                            <i class="fa-solid fa-circle-check text-[150px] @md:text-[300px]"></i>
+                        </div>
+                        <div class="max-w-2xl">
+                            <span class="px-2.5 py-0.5 @md:px-4 @md:py-1.5 bg-white text-orange-600 text-[10px] @md:text-sm font-bold rounded-full uppercase tracking-wider">સત્તાવાર પોર્ટલ માર્ગદર્શિકા</span>
+                            <h2 class="text-base sm:text-lg @md:text-3xl @lg:text-4xl font-extrabold mt-2 @md:mt-5 leading-snug">તમામ સરકારી યોજનાઓ અને પ્રમાણપત્રોની સચોટ માહિતી હવે એક જ જગ્યાએ!</h2>
+                            <p class="text-[11px] @md:text-base text-orange-100 mt-1 @md:mt-3">આધાર સુધારા, રેશન કાર્ડ સુધારા, આવક અને જાતિના દાખલા તથા શૈક્ષણિક યોજનાઓનું ઘરે બેઠા વિગતવાર માર્ગદર્શન મેળવો.</p>
+
+                        </div>
+                    </div>
+
+                    <div onclick="switchTab('bharti')" class="bg-gradient-to-r from-red-600 to-pink-600 text-white p-4 @md:p-8 rounded-2xl shadow-lg cursor-pointer flex items-center justify-between hover:scale-[1.01] transition-all">
+                        <div class="flex items-center space-x-3 @md:space-x-5 text-left">
+                            <span class="h-9 w-9 @md:h-16 @md:w-16 bg-white/20 rounded-xl @md:rounded-2xl flex items-center justify-center text-sm @md:text-2xl animate-pulse shrink-0">
+                                <i class="fa-solid fa-bullhorn text-yellow-300"></i>
+                            </span>
+                            <div>
+                                <h3 class="font-bold text-xs @md:text-xl">તાજેતરમાં ચાલુ થયેલ સરકારી ભરતીઓ</h3>
+                                <p class="text-[9px] @md:text-sm text-red-100 mt-0.5 @md:mt-1.5">લાયકાત અને ઓનલાઇન અરજી વિગતો જુઓ.</p>
+                            </div>
+                        </div>
+                        <span class="bg-white text-red-600 font-bold px-3 py-1.5 @md:px-5 @md:py-3 rounded-lg @md:rounded-xl text-[9px] @md:text-sm shadow-md shrink-0 flex items-center">
+                            જુઓ <i class="fa-solid fa-chevron-right ml-1 @md:ml-2"></i>
+                        </span>
+                    </div>
+
+                    <div class="space-y-3 @md:space-y-5">
+                        <h3 class="text-[10px] @md:text-sm font-bold text-slate-400 uppercase tracking-wider"><i class="fa-solid fa-screwdriver-wrench mr-1.5 text-indigo-600"></i> ખાસ ઓનલાઇન સુવિધાઓ અને ઉપયોગી સાધનો</h3>
+                        <div class="grid grid-cols-2 gap-3 @md:gap-6">
+                            <div onclick="window.openBiodataBuilder()" class="bg-white p-3.5 @md:p-6 rounded-2xl border border-slate-200 hover:border-indigo-500 shadow-sm flex items-center space-x-2.5 @md:space-x-5 cursor-pointer hover:shadow-md transition-all duration-200">
+                                <div class="h-9 w-9 @md:h-16 @md:w-16 bg-indigo-100 text-indigo-700 rounded-xl @md:rounded-2xl flex items-center justify-center text-sm @md:text-2xl shrink-0">
+                                    <i class="fa-solid fa-file-invoice"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-[10px] @md:text-lg text-slate-900 leading-tight">બાયોડેટા મેકર</h4>
+                                    <p class="text-[8px] @md:text-sm text-slate-400 mt-0.5 @md:mt-1.5">સીવી ઓનલાઇન બનાવો</p>
+                                </div>
+                            </div>
+                            <div onclick="switchTab('pcstore')" class="bg-white p-3.5 @md:p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-2.5 @md:space-x-5 cursor-pointer hover:border-teal-400 hover:shadow transition-all">
+                                <div class="h-9 w-9 @md:h-16 @md:w-16 bg-teal-100 text-teal-700 rounded-xl @md:rounded-2xl flex items-center justify-center text-sm @md:text-2xl shrink-0">
+                                    <i class="fa-solid fa-laptop-code"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-[10px] @md:text-lg text-slate-900 leading-tight">કમ્પ્યુટર સ્ટોર</h4>
+                                    <p class="text-[8px] @md:text-sm text-slate-400 mt-0.5 @md:mt-1.5">લેપટોપ ઓફર્સ જુઓ</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 @md:space-y-6">
+                        <div class="flex flex-col border-b border-slate-200 pb-2.5 @md:pb-5">
+                            <h3 class="text-xs @md:text-xl font-bold text-slate-900 mb-2 @md:mb-4"><i class="fa-solid fa-rss text-blue-600 mr-1.5"></i> લેટેસ્ટ યોજનાઓ અને લાઈવ ફોર્મ</h3>
+                            <div class="flex gap-1.5 @md:gap-3 overflow-x-auto no-scrollbar w-full py-1 @md:py-2">
+                                <button class="filter-btn active whitespace-nowrap px-3 py-1 @md:px-5 @md:py-2 bg-blue-600 text-white rounded-lg @md:rounded-xl text-[10px] @md:text-sm font-bold shadow-md transition-all" data-filter="All">બધી</button>
+                                <button class="filter-btn whitespace-nowrap px-3 py-1 @md:px-5 @md:py-2 bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 rounded-lg @md:rounded-xl text-[10px] @md:text-sm font-semibold transition-all" data-filter="Card">કાર્ડ</button>
+                                <button class="filter-btn whitespace-nowrap px-3 py-1 @md:px-5 @md:py-2 bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 rounded-lg @md:rounded-xl text-[10px] @md:text-sm font-semibold transition-all" data-filter="Govt">યોજનાઓ</button>
+                                <button class="filter-btn whitespace-nowrap px-3 py-1 @md:px-5 @md:py-2 bg-white text-slate-600 hover:bg-slate-50 border border-slate-200 rounded-lg @md:rounded-xl text-[10px] @md:text-sm font-semibold transition-all" data-filter="Certificate">દાખલાઓ</button>
+                            </div>
+                        </div>
+                        <div id="feedList" class="grid grid-cols-1 @md:grid-cols-2 @lg:grid-cols-3 gap-4 @md:gap-6"></div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Live Recruitment Updates -->
+                <div id="bhartiTab" class="tab-content space-y-4 @md:space-y-8">
+                    <div class="bg-red-50 border-l-4 border-red-600 p-4 @md:p-8 rounded-2xl shadow-sm">
+                        <h3 class="text-sm @md:text-2xl font-bold text-red-950 flex items-center"><i class="fa-solid fa-briefcase text-red-600 mr-2 @md:mr-3 shrink-0"></i> ગુજરાત સરકારી ભરતીઓ ૨૦૨૬</h3>
+                        <p class="text-[10px] @md:text-base text-red-800 mt-1 @md:mt-3 leading-normal">ગુજરાત પોલીસ, ગૌણ સેવા (GSSSB), GPSC અને અન્ય તમામ સરકારી ભરતીઓની યાદી.</p>
+                        <span id="bhartiCount" class="inline-block mt-2 @md:mt-4 bg-red-600 text-white font-extrabold px-2 py-1 @md:px-4 @md:py-2 rounded @md:rounded-lg text-[9px] @md:text-sm shadow-sm">૩ લાઈવ ભરતીઓ</span>
+                    </div>
+                    <div id="bhartiList" class="grid grid-cols-1 @md:grid-cols-2 gap-4 @md:gap-6"></div>
+                </div>
+
+                <!-- Tab 3: Service Catalog -->
+                <div id="catalogTab" class="tab-content space-y-6 @md:space-y-10">
+                    <div class="bg-blue-50 border-l-4 border-blue-700 p-4 @md:p-8 rounded-2xl shadow-sm">
+                        <h3 class="text-sm @md:text-2xl font-bold text-blue-950 flex items-center"><i class="fa-solid fa-book-bookmark text-blue-700 mr-2 @md:mr-3 shrink-0"></i> સર્વિસ કેટેલોગ (sitaramonline.co.in)</h3>
+                        <p class="text-[10px] @md:text-base text-blue-800 mt-1 @md:mt-3 leading-normal">આધાર, રેશન કાર્ડ અને રાજ્ય સરકારની અન્ય નાગરિક સેવાઓ માટેનું ડાયરેક્ટ માર્ગદર્શિકા ફોર્મ.</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 @md:grid-cols-4 gap-3 @md:gap-6">
+                        <div onclick="window.filterCatalogByCategory('Card')" class="bg-white p-3 @md:p-6 rounded-2xl border border-slate-200 hover:border-blue-500 shadow-sm hover:shadow transition-all text-center cursor-pointer flex flex-col items-center justify-center">
+                            <div class="h-10 w-10 @md:h-16 @md:w-16 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-sm @md:text-2xl mb-1.5 @md:mb-3"><i class="fa-solid fa-address-card"></i></div>
+                            <h4 class="font-bold text-[10px] @md:text-sm text-slate-800 leading-tight">આઇડી કાર્ડ સેવાઓ</h4>
+                        </div>
+                        <div onclick="window.filterCatalogByCategory('Certificate')" class="bg-white p-3 @md:p-6 rounded-2xl border border-slate-200 hover:border-emerald-500 shadow-sm hover:shadow transition-all text-center cursor-pointer flex flex-col items-center justify-center">
+                            <div class="h-10 w-10 @md:h-16 @md:w-16 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center text-sm @md:text-2xl mb-1.5 @md:mb-3"><i class="fa-solid fa-file-signature"></i></div>
+                            <h4 class="font-bold text-[10px] @md:text-sm text-slate-800 leading-tight">દાખલા / સર્ટિફિકેટ્સ</h4>
+                        </div>
+                        <div onclick="window.filterCatalogByCategory('Govt')" class="bg-white p-3 @md:p-6 rounded-2xl border border-slate-200 hover:border-orange-500 shadow-sm hover:shadow transition-all text-center cursor-pointer flex flex-col items-center justify-center">
+                            <div class="h-10 w-10 @md:h-16 @md:w-16 bg-orange-100 text-orange-700 rounded-full flex items-center justify-center text-sm @md:text-2xl mb-1.5 @md:mb-3"><i class="fa-solid fa-hand-holding-heart"></i></div>
+                            <h4 class="font-bold text-[10px] @md:text-sm text-slate-800 leading-tight">સરકારી કલ્યાણ યોજના</h4>
+                        </div>
+                        <div onclick="window.filterCatalogByCategory('Ration')" class="bg-white p-3 @md:p-6 rounded-2xl border border-slate-200 hover:border-indigo-500 shadow-sm hover:shadow transition-all text-center cursor-pointer flex flex-col items-center justify-center">
+                            <div class="h-10 w-10 @md:h-16 @md:w-16 bg-indigo-100 text-indigo-700 rounded-full flex items-center justify-center text-sm @md:text-2xl mb-1.5 @md:mb-3"><i class="fa-solid fa-bowl-food"></i></div>
+                            <h4 class="font-bold text-[10px] @md:text-sm text-slate-800 leading-tight">રેશન કાર્ડ સેવાઓ</h4>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center border-t border-slate-200 pt-4 @md:pt-8">
+                        <h3 class="font-bold text-slate-800 text-xs @md:text-lg uppercase tracking-wider" id="catalogSubHeader">તમામ ઓનલાઇન સેવાઓ</h3>
+                        <button onclick="window.resetCatalogFilter()" id="resetCatalogBtn" class="hidden text-[10px] @md:text-sm text-blue-600 hover:text-blue-700 font-extrabold flex items-center space-x-1">
+                            <span>બધી બતાવો</span> <i class="fa-solid fa-rotate-left"></i>
+                        </button>
+                    </div>
+                    <div id="catalogList" class="grid grid-cols-1 @md:grid-cols-2 @lg:grid-cols-3 gap-3 @md:gap-6"></div>
+                </div>
+
+                <!-- Tab 4: Current Affairs & GK -->
+                <div id="currentAffairsTab" class="tab-content space-y-6 @md:space-y-10">
+                    <div class="bg-gradient-to-r from-amber-500 to-orange-600 text-white p-5 @md:p-8 rounded-3xl shadow-lg relative overflow-hidden">
+                        <h3 class="text-base @md:text-2xl font-black flex items-center"><i class="fa-solid fa-book-open mr-2 @md:mr-3 text-yellow-300"></i> ડેઇલી કરંટ અફેર્સ અને GK (૨૦૨૬)</h3>
+                        <p class="text-[10px] @md:text-base text-amber-50 mt-1 @md:mt-3 leading-normal">પોલીસ, GSSSB, GPSC જેવી તમામ સરકારી પરીક્ષાઓ માટે ઉપયોગી રોજબરોજનું જ્ઞાન.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 @lg:grid-cols-2 gap-6 @md:gap-10">
+                        <div class="space-y-4 @md:space-y-6">
+                            <h4 class="font-bold text-xs @md:text-xl text-slate-900 flex items-center border-b pb-1.5 @md:pb-3"><i class="fa-solid fa-newspaper text-indigo-600 mr-2"></i> આજના મહત્વના કરંટ અફેર્સ</h4>
+                            <div class="space-y-3 @md:space-y-6" id="caFeedContainer"></div>
+                        </div>
+
+                        <div class="space-y-4 @md:space-y-6">
+                            <h4 class="font-bold text-xs @md:text-xl text-slate-900 flex items-center border-b pb-1.5 @md:pb-3"><i class="fa-solid fa-circle-question text-amber-500 mr-2"></i> જનરલ નોલેજ ક્વિઝ (GK)</h4>
+                            <div class="space-y-3.5 @md:space-y-6" id="gkFeedContainer"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 5: Computer & Laptop Selling Store -->
+                <div id="pcstoreTab" class="tab-content space-y-6 @md:space-y-10">
+                    <div class="bg-teal-50 border-l-4 border-teal-600 p-4 @md:p-8 rounded-2xl shadow-sm">
+                        <h3 class="text-xs @md:text-2xl font-bold text-teal-950 flex items-center"><i class="fa-solid fa-laptop-code text-teal-600 mr-2 @md:mr-3 shrink-0"></i> Sitaram Computer Store</h3>
+                        <p class="text-[10px] @md:text-base text-teal-800 mt-1 @md:mt-3 leading-normal">સેકન્ડ હેન્ડ (રીફર્બીશ્ડ) તેમજ બ્રાન્ડ ન્યુ કોમ્પ્યુટર્સ, લેપટોપની બેસ્ટ સેલિંગ ધમાકા ઓફર્સ.</p>
+                    </div>
+                    <div id="pcProductsList" class="grid grid-cols-1 @md:grid-cols-2 @lg:grid-cols-3 gap-4 @md:gap-6"></div>
+                </div>
+            </main>
+
+            <!-- Bottom Navigation Bar (Material You Style - Hidden on Desktop container) -->
+            <nav class="bg-white border-t border-slate-200/80 py-1.5 px-1 flex justify-around items-center shrink-0 z-30 relative shadow-[0_-3px_12px_rgba(0,0,0,0.03)] h-[68px] @md:hidden">
+                <button onclick="window.switchTab('home')" class="nav-btn flex-1 flex flex-col items-center justify-center cursor-pointer transition-colors duration-200 text-blue-700">
+                    <div class="nav-icon-wrapper px-5 py-1.5 rounded-full bg-blue-100 text-blue-800 transition-all duration-300 mb-0.5 shadow-sm"><i class="fa-solid fa-house text-base"></i></div>
+                    <span class="text-[11px] font-bold text-slate-900 tracking-tight leading-none mt-1">હોમ</span>
+                </button>
+                <button onclick="window.switchTab('bharti')" class="nav-btn flex-1 flex flex-col items-center justify-center cursor-pointer transition-colors duration-200 text-slate-400 hover:text-blue-600">
+                    <div class="nav-icon-wrapper px-4 py-1.5 rounded-full bg-transparent text-slate-400 transition-all duration-300 mb-0.5"><i class="fa-solid fa-briefcase text-base"></i></div>
+                    <span class="text-[11px] font-semibold text-slate-500 tracking-tight leading-none mt-1">ભરતી</span>
+                </button>
+                <button onclick="window.switchTab('catalog')" class="nav-btn flex-1 flex flex-col items-center justify-center cursor-pointer transition-colors duration-200 text-slate-400 hover:text-blue-600">
+                    <div class="nav-icon-wrapper px-4 py-1.5 rounded-full bg-transparent text-slate-400 transition-all duration-300 mb-0.5"><i class="fa-solid fa-list-ul text-base"></i></div>
+                    <span class="text-[11px] font-semibold text-slate-500 tracking-tight leading-none mt-1">કેટેલોગ</span>
+                </button>
+                <button onclick="window.switchTab('currentAffairs')" class="nav-btn flex-1 flex flex-col items-center justify-center cursor-pointer transition-colors duration-200 text-slate-400 hover:text-blue-600">
+                    <div class="nav-icon-wrapper px-4 py-1.5 rounded-full bg-transparent text-slate-400 transition-all duration-300 mb-0.5"><i class="fa-solid fa-book text-base"></i></div>
+                    <span class="text-[11px] font-semibold text-slate-500 tracking-tight leading-none mt-1">GK & કરંટ</span>
+                </button>
+                <button onclick="window.switchTab('pcstore')" class="nav-btn flex-1 flex flex-col items-center justify-center cursor-pointer transition-colors duration-200 text-slate-400 hover:text-blue-600">
+                    <div class="nav-icon-wrapper px-4 py-1.5 rounded-full bg-transparent text-slate-400 transition-all duration-300 mb-0.5"><i class="fa-solid fa-laptop text-base"></i></div>
+                    <span class="text-[11px] font-semibold text-slate-500 tracking-tight leading-none mt-1">PC સ્ટોર</span>
+                </button>
+            </nav>
+
+            <!-- Footer -->
+            <footer class="bg-slate-900 text-slate-400 pt-8 @md:pt-16 pb-4 @md:pb-8 border-t border-slate-800 mt-auto no-print text-[10px] @md:text-sm" id="webFooter">
+                <div class="px-4 @md:px-8 space-y-6 @md:space-y-10">
+                    <div class="grid grid-cols-1 @md:grid-cols-3 gap-6 @md:gap-10 pb-6 @md:pb-10 border-b border-slate-800">
+                        <div class="space-y-2 @md:space-y-4">
+                            <div class="flex items-center space-x-2 text-white">
+                                <div class="bg-white p-1 @md:p-1.5 rounded">
+                                    <svg class="h-6 w-6 @md:h-10 @md:w-10" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="160" cy="110" r="32" fill="#0c4a8a"/><path d="M160 155c-25 0-50 15-60 40-10 25-5 55 15 70s50 5 65-15c10-15 10-35 0-50l40-10c15-4 25-15 25-30v-5h-85z" fill="#0c4a8a"/><circle cx="145" cy="275" r="42" stroke="#0c4a8a" stroke-width="12" fill="none"/><circle cx="320" cy="65" r="32" fill="#e11d24"/><path d="M320 105c-35 0-70 15-110 35l110 120c10 10 20 40 10 75l10-15c15-25 25-55 25-85v-100c0-15-15-30-30-30z" fill="#e11d24"/><path d="M80 195 C 50 245, 430 295, 430 195 C 430 95, 50 145, 80 195" stroke="#7ec242" stroke-width="14" fill="none"/><path d="M90 355 Q 240 315 390 355" stroke="#008cd6" stroke-width="8" fill="none"/></svg>
+                                </div>
+                                <span class="font-bold @md:text-lg">SITARAM TECH SUPPORT</span>
+                            </div>
+                            <p class="leading-relaxed">તમામ સરકારી સેવાઓ અને યોજનાઓ માટેનું અત્યંત વિશ્વસનીય પોર્ટલ માર્ગદર્શિકા.</p>
+                        </div>
+                        <div class="space-y-2 @md:space-y-4">
+                            <h4 class="text-white font-bold border-l-2 border-blue-600 pl-2 @md:pl-3 text-xs @md:text-lg">સંપર્ક માહિતી</h4>
+                            <ul class="space-y-1.5 @md:space-y-3">
+                                <li class="flex items-start"><i class="fa-solid fa-location-dot text-red-500 mr-2 mt-0.5"></i><span>શાખા ૧: શોપ નંબર ૧, રોયલ ચોકડી, તળાજા</span></li>
+                                <li class="flex items-start"><i class="fa-solid fa-location-dot text-red-500 mr-2 mt-0.5"></i><span>શાખા ૨: SBI બેંક પાસે, વાવ ચોક, તળાજા</span></li>
+                                <li class="flex items-center"><i class="fa-solid fa-phone text-emerald-500 mr-2"></i><a href="tel:+917359415959" class="hover:text-white transition-all">+91 73594 15959</a></li>
+                                <li class="flex items-center"><i class="fa-solid fa-envelope text-blue-500 mr-2"></i><a href="mailto:pansts321@gmail.com" class="hover:text-white transition-all">pansts321@gmail.com</a></li>
+                            </ul>
+                        </div>
+                        <div class="space-y-2 @md:space-y-4">
+                            <h4 class="text-white font-bold border-l-2 border-amber-600 pl-2 @md:pl-3 text-xs @md:text-lg">અસ્વીકરણ (Disclaimer)</h4>
+                            <p class="leading-relaxed text-[9px] @md:text-sm text-slate-500">આ એપ કન્સેપ્ટ માત્ર સેવા માર્ગદર્શન હેતુ માટે જ બનાવવામાં આવ્યો છે. આ કોઈ સત્તાવાર સરકારી સેવા નથી.</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row justify-between items-center text-[9px] @md:text-sm">
+                        <p>© ૨૦૨૬ Sitaram Tech Support.</p>
+                    </div>
+                </div>
+            </footer>
+
+            <!-- Sidebar Drawer -->
+            <div id="sidebarOverlay" onclick="window.closeSidebar()" class="absolute inset-0 bg-black bg-opacity-40 z-40 hidden transition-opacity duration-300"></div>
+            <div id="sidebar" class="absolute left-0 top-0 bottom-0 w-64 bg-white z-50 transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col shadow-2xl">
+                <div class="p-5 bg-gradient-to-r from-blue-700 to-indigo-800 text-white">
+                    <h3 class="font-bold text-base">સીતારામ પોર્ટલ</h3>
+                    <p class="text-[10px] text-blue-100">સરકારી સેવાઓ અને આઇટી સ્ટોર</p>
+                </div>
+                <div class="flex-1 overflow-y-auto py-3">
+                    <div class="space-y-1.5 px-3">
+                        <button onclick="window.closeSidebar(); window.switchTab('home')" class="w-full text-left px-4 py-2 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-100 flex items-center"><i class="fa-solid fa-house mr-3 text-slate-400"></i> મુખ્ય પાનું</button>
+                        <button onclick="window.closeSidebar(); window.switchTab('bharti')" class="w-full text-left px-4 py-2 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-100 flex items-center"><i class="fa-solid fa-briefcase mr-3 text-red-500"></i> સરકારી ભરતી</button>
+                        <button onclick="window.closeSidebar(); window.switchTab('catalog')" class="w-full text-left px-4 py-2 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-100 flex items-center"><i class="fa-solid fa-list-ul mr-3 text-slate-400"></i> સર્વિસ કેટેલોગ</button>
+                        <button onclick="window.closeSidebar(); window.switchTab('currentAffairs')" class="w-full text-left px-4 py-2 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-100 flex items-center"><i class="fa-solid fa-book mr-3 text-amber-500"></i> કરંટ અફેર્સ & GK</button>
+                        <button onclick="window.closeSidebar(); window.switchTab('pcstore')" class="w-full text-left px-4 py-2 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-100 flex items-center"><i class="fa-solid fa-laptop mr-3 text-teal-600"></i> કોમ્પ્યુટર અને લેપટોપ સ્ટોર</button>
+                        <button onclick="window.closeSidebar(); window.openAboutModal()" class="w-full text-left px-4 py-2 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-100 flex items-center"><i class="fa-solid fa-circle-info mr-3 text-indigo-600"></i> આપણા વિશે & અસ્વીકરણ</button>
+                        <hr class="border-slate-100 my-2">
+                        <button onclick="window.open('https://sitaramonline.co.in', '_blank')" class="w-full text-left px-4 py-2 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-100 flex items-center"><i class="fa-solid fa-globe mr-3 text-blue-600"></i> સત્તાવાર વેબસાઇટ</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Modals (Detail, About, Biodata) - Dynamically positioned inside app wrapper -->
+        <div id="detailModal" class="app-modal inset-0 bg-black/60 hidden flex items-center justify-center p-4 no-print">
+            <div class="bg-white rounded-3xl w-full max-w-xl max-h-[90vh] overflow-y-auto p-6 @md:p-10 shadow-2xl transform scale-95 transition-all duration-300 relative">
+                <button onclick="window.closeDetailModal()" class="absolute right-4 top-4 h-9 w-9 @md:h-12 @md:w-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition">
+                    <i class="fa-solid fa-xmark @md:text-xl"></i>
+                </button>
+                <div class="mb-3">
+                    <span id="modalBadge" class="px-3 py-1 @md:px-4 @md:py-1.5 bg-blue-100 text-blue-700 text-xs @md:text-sm rounded font-extrabold uppercase">બેજ</span>
+                </div>
+                <h3 id="modalTitle" class="text-xl @md:text-3xl font-bold text-slate-900 leading-snug mb-1.5 @md:mb-3">ટાઈટલ</h3>
+                <p id="modalCompany" class="text-xs @md:text-base text-slate-500 mb-5 @md:mb-8 flex items-center"><i class="fa-solid fa-building mr-1.5 text-blue-500"></i> કંપની</p>
+                
+                <div class="space-y-5 @md:space-y-8 mb-6 @md:mb-10 text-left">
+                    <div class="bg-slate-50 p-4 @md:p-6 rounded-xl border border-slate-100" id="benefitContainer">
+                        <h4 class="font-bold text-xs @md:text-lg text-slate-800 mb-1.5 @md:mb-3 flex items-center" id="modalBenefitTitle"><i class="fa-solid fa-star text-amber-500 mr-2"></i> વિગતો:</h4>
+                        <p id="modalBenefit" class="text-xs @md:text-base text-slate-600 leading-relaxed">વિગત...</p>
+                    </div>
+                    <div id="modalDocsWrapper">
+                        <h4 class="font-bold text-xs @md:text-lg text-slate-800 mb-2.5 @md:mb-4 flex items-center" id="modalDocsTitle"><i class="fa-solid fa-file-invoice text-blue-600 mr-2"></i> જરૂરી દસ્તાવેજો:</h4>
+                        <ul id="modalDocs" class="space-y-2 @md:space-y-3 text-xs @md:text-base text-slate-600"></ul>
+                    </div>
+                    <div id="additionalInfoContainer">
+                        <h4 class="font-bold text-xs @md:text-lg text-slate-800 mb-1.5 @md:mb-3 flex items-center"><i class="fa-solid fa-circle-info text-emerald-600 mr-2"></i> ઓનલાઇન મેળવવાની રીત:</h4>
+                        <p id="modalMethod" class="text-xs @md:text-base text-slate-600 leading-relaxed">આ સેવા અથવા યોજનાના ઓનલાઇન ફોર્મ ભરવા અને સબમિટ કરવા માટે <strong>sitaramonline.co.in</strong> વેબસાઇટની વિગતવાર માર્ગદર્શિકા અનુસરો.</p>
+                    </div>
+                </div>
+                <div class="flex space-x-3 @md:space-x-5">
+                    <button onclick="window.closeDetailModal()" class="flex-1 py-3 @md:py-4 bg-slate-100 text-slate-700 font-bold rounded-xl text-xs @md:text-base hover:bg-slate-200 transition">બંધ કરો</button>
+                    <a id="modalActionBtn" href="#" target="_blank" class="flex-1 py-3 @md:py-4 bg-blue-600 text-white font-bold rounded-xl text-xs @md:text-base text-center hover:bg-blue-700 transition shadow-md shadow-blue-100">ઓનલાઇન અરજી માર્ગદર્શિકા</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Modal -->
+        <div id="aboutModal" class="app-modal inset-0 bg-black/60 hidden flex items-center justify-center p-4 no-print">
+            <div class="bg-white rounded-3xl w-full max-w-xl max-h-[90vh] overflow-y-auto p-6 @md:p-10 shadow-2xl transform scale-95 transition-all duration-300 relative text-center">
+                <button onclick="window.closeAboutModal()" class="absolute right-4 top-4 h-9 w-9 @md:h-12 @md:w-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition"><i class="fa-solid fa-xmark @md:text-xl"></i></button>
+                <div class="mb-5 @md:mb-8 text-center">
+                    <div class="h-24 w-24 @md:h-32 @md:w-32 mx-auto mb-3 @md:mb-5 flex items-center justify-center">
+                        <svg class="h-full w-full" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="160" cy="110" r="32" fill="#0c4a8a"/><path d="M160 155c-25 0-50 15-60 40-10 25-5 55 15 70s50 5 65-15c10-15 10-35 0-50l40-10c15-4 25-15 25-30v-5h-85z" fill="#0c4a8a"/><circle cx="145" cy="275" r="42" stroke="#0c4a8a" stroke-width="12" fill="none"/><circle cx="320" cy="65" r="32" fill="#e11d24"/><path d="M320 105c-35 0-70 15-110 35l110 120c10 10 20 40 10 75l10-15c15-25 25-55 25-85v-100c0-15-15-30-30-30z" fill="#e11d24"/><path d="M80 195 C 50 245, 430 295, 430 195 C 430 95, 50 145, 80 195" stroke="#7ec242" stroke-width="14" fill="none"/><path d="M90 355 Q 240 315 390 355" stroke="#008cd6" stroke-width="8" fill="none"/></svg>
+                    </div>
+                    <h3 class="text-lg @md:text-3xl font-bold text-slate-900 leading-snug">SITARAM TECH SUPPORT</h3>
+                    <p class="text-[10px] @md:text-sm text-slate-500 font-bold tracking-wider uppercase mt-1">સીતારામ ઓનલાઇન સ્ટોર અને આઇટી સપોર્ટ</p>
+                </div>
+                <div class="space-y-4 @md:space-y-6 mb-6 @md:mb-10 text-left">
+                    <div class="bg-slate-50 p-4 @md:p-6 rounded-xl border border-slate-100">
+                        <h4 class="font-bold text-xs @md:text-lg text-slate-800 mb-2 @md:mb-4 flex items-center"><i class="fa-solid fa-location-dot text-red-500 mr-2"></i> ઓફિસ સરનામું:</h4>
+                        <p class="text-xs @md:text-base text-slate-600 leading-relaxed font-semibold mb-2">
+                            <span class="text-blue-700 font-bold">શાખા ૧:</span> શોપ નંબર ૧, રોયલ ચોકડી, તળાજા
+                        </p>
+                        <p class="text-xs @md:text-base text-slate-600 leading-relaxed font-semibold">
+                            <span class="text-blue-700 font-bold">શાખા ૨:</span> SBI બેંક પાસે, વાવ ચોક, તળાજા
+                        </p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 @md:gap-5">
+                        <a href="tel:+917359415959" class="p-3.5 @md:p-6 bg-emerald-50 border border-emerald-100 hover:bg-emerald-100 rounded-xl flex flex-col items-center justify-center text-center transition">
+                            <i class="fa-solid fa-phone text-emerald-600 text-lg @md:text-3xl mb-1.5 @md:mb-3 animate-pulse"></i>
+                            <span class="font-bold text-[10px] @md:text-base text-emerald-950">ફોન કોલ</span>
+                            <span class="text-[9px] @md:text-sm text-slate-500 font-bold mt-1">+91 73594 15959</span>
+                        </a>
+                        <a href="mailto:pansts321@gmail.com" class="p-3.5 @md:p-6 bg-blue-50 border border-blue-100 hover:bg-blue-100 rounded-xl flex flex-col items-center justify-center text-center transition">
+                            <i class="fa-solid fa-envelope text-blue-600 text-lg @md:text-3xl mb-1.5 @md:mb-3"></i>
+                            <span class="font-bold text-[10px] @md:text-base text-blue-950">ઇમેઇલ મોકલો</span>
+                            <span class="text-[9px] @md:text-sm text-slate-500 break-all font-semibold mt-1">pansts321@gmail.com</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="flex">
+                    <button onclick="window.closeAboutModal()" class="flex-1 py-3 @md:py-4 bg-slate-100 text-slate-700 font-bold rounded-xl text-xs @md:text-base hover:bg-slate-200 transition">બંધ કરો</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Biodata Modal WITH FULL LOGIC -->
+        <div id="biodataModal" class="app-modal inset-0 bg-black/60 hidden flex items-center justify-center p-4 no-print">
+            <div class="bg-white rounded-3xl w-full max-w-2xl max-h-[92vh] overflow-y-auto p-6 @md:p-10 shadow-2xl relative">
+                <button onclick="window.closeBiodataBuilder()" class="absolute right-4 top-4 h-9 w-9 @md:h-12 @md:w-12 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition-all">
+                    <i class="fa-solid fa-xmark @md:text-xl"></i>
+                </button>
+                <div class="flex items-center space-x-3 @md:space-x-5 mb-6 @md:mb-8 pb-4 @md:pb-6 border-b">
+                    <div class="h-10 w-10 @md:h-14 @md:w-14 bg-indigo-100 text-indigo-700 rounded-xl flex items-center justify-center text-xl @md:text-2xl shrink-0"><i class="fa-solid fa-file-invoice"></i></div>
+                    <div><h3 class="text-lg @md:text-2xl font-bold text-slate-900">સીતારામ બાયોડેટા બિલ્ડર (CV Maker)</h3><p class="text-xs @md:text-base text-slate-500">તમારી વિગતો ભરો અને સુંદર બાયોડેટા PDF ડાઉનલોડ કરો</p></div>
+                </div>
+                <div class="flex justify-between items-center mb-6 @md:mb-8 px-4 @md:px-8">
+                    <div class="flex items-center space-x-2 text-indigo-600 font-bold text-xs @md:text-sm" id="stepIndicator1"><span class="h-6 w-6 @md:h-8 @md:w-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold">૧</span><span>વ્યક્તિગત</span></div>
+                    <div class="h-0.5 bg-slate-200 flex-1 mx-2 @md:mx-4"></div>
+                    <div class="flex items-center space-x-2 text-slate-400 font-semibold text-xs @md:text-sm" id="stepIndicator2"><span class="h-6 w-6 @md:h-8 @md:w-8 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center font-bold">૨</span><span>સંપર્ક/લાયકાત</span></div>
+                    <div class="h-0.5 bg-slate-200 flex-1 mx-2 @md:mx-4"></div>
+                    <div class="flex items-center space-x-2 text-slate-400 font-semibold text-xs @md:text-sm" id="stepIndicator3"><span class="h-6 w-6 @md:h-8 @md:w-8 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center font-bold">૩</span><span>અનુભવ/પ્રિન્ટ</span></div>
+                </div>
+                <form id="cvForm" onsubmit="event.preventDefault();" class="space-y-6 @md:space-y-8 text-left">
+                    <div id="cvStep1" class="space-y-4 @md:space-y-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 @md:gap-6">
+                            <div><label class="block text-xs @md:text-sm font-bold text-slate-700 mb-1 @md:mb-2">પૂરું નામ (Full Name) *</label><input type="text" id="cvName" class="w-full p-2.5 @md:p-3.5 rounded-xl border border-slate-200 text-xs @md:text-sm"></div>
+                            <div><label class="block text-xs @md:text-sm font-bold text-slate-700 mb-1 @md:mb-2">પિતાનું નામ (Father's Name) *</label><input type="text" id="cvFather" class="w-full p-2.5 @md:p-3.5 rounded-xl border border-slate-200 text-xs @md:text-sm"></div>
+                            <div><label class="block text-xs @md:text-sm font-bold text-slate-700 mb-1 @md:mb-2">જન્મ તારીખ (Date of Birth) *</label><input type="date" id="cvDob" class="w-full p-2.5 @md:p-3.5 rounded-xl border border-slate-200 text-xs @md:text-sm"></div>
+                            <div><label class="block text-xs @md:text-sm font-bold text-slate-700 mb-1 @md:mb-2">જાતિ (Gender) *</label><select id="cvGender" class="w-full p-2.5 @md:p-3.5 rounded-xl border border-slate-200 text-xs @md:text-sm"><option value="પુરુષ">પુરુષ</option><option value="સ્ત્રી">સ્ત્રી</option></select></div>
+                            <div><label class="block text-xs @md:text-sm font-bold text-slate-700 mb-1 @md:mb-2">વૈવાહિક સ્થિતિ</label><select id="cvMarital" class="w-full p-2.5 @md:p-3.5 rounded-xl border border-slate-200 text-xs @md:text-sm"><option value="અપરિણિત">અપરિણિત</option><option value="પરિણિત">પરિણિત</option></select></div>
+                            <div><label class="block text-xs @md:text-sm font-bold text-slate-700 mb-1 @md:mb-2">ધર્મ અને જ્ઞાતિ</label><input type="text" id="cvCaste" class="w-full p-2.5 @md:p-3.5 rounded-xl border border-slate-200 text-xs @md:text-sm"></div>
+                            <div class="sm:col-span-2"><label class="block text-xs @md:text-sm font-bold text-slate-700 mb-1 @md:mb-2">ભાષાઓનું જ્ઞાન</label><input type="text" id="cvLang" value="ગુજરાતી, હિન્દી, અંગ્રેજી" class="w-full p-2.5 @md:p-3.5 rounded-xl border border-slate-200 text-xs @md:text-sm"></div>
+                            <div class="sm:col-span-2 border-t pt-4 @md:pt-6 mt-2 @md:mt-4">
+                                <label class="block text-xs @md:text-sm font-bold text-slate-700 mb-2 @md:mb-4"><i class="fa-solid fa-image text-indigo-600 mr-1"></i> પાસપોર્ટ સાઇઝ ફોટો - વૈકલ્પિક</label>
+                                <div class="flex items-center space-x-4">
+                                    <input type="file" id="cvPhotoInput" accept="image/*" class="hidden" onchange="window.handlePhotoUpload(event)">
+                                    <button type="button" onclick="document.getElementById('cvPhotoInput').click()" class="px-4 py-2.5 @md:px-6 @md:py-3.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-xl text-xs @md:text-sm font-bold"><i class="fa-solid fa-camera mr-2 text-indigo-600"></i> ફોટો પસંદ કરો</button>
+                                    <div id="formPhotoPreview" class="h-12 w-12 @md:h-16 @md:w-16 border border-slate-200 rounded-xl overflow-hidden hidden shrink-0 shadow-sm"><img id="formPhotoPreviewImg" class="h-full w-full object-cover"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="cvStep2" class="space-y-4 @md:space-y-6 hidden">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 @md:gap-6">
+                            <div><label class="block text-xs @md:text-sm font-bold text-slate-700 mb-1 @md:mb-2">મોબાઇલ નંબર *</label><input type="tel" id="cvPhone" class="w-full p-2.5 @md:p-3.5 rounded-xl border border-slate-200 text-xs @md:text-sm"></div>
+                            <div><label class="block text-xs @md:text-sm font-bold text-slate-700 mb-1 @md:mb-2">ઇમેઇલ આઇડી</label><input type="email" id="cvEmail" class="w-full p-2.5 @md:p-3.5 rounded-xl border border-slate-200 text-xs @md:text-sm"></div>
+                            <div class="sm:col-span-2"><label class="block text-xs @md:text-sm font-bold text-slate-700 mb-1 @md:mb-2">સરનામું *</label><textarea id="cvAddress" rows="2" class="w-full p-2.5 @md:p-3.5 rounded-xl border border-slate-200 text-xs @md:text-sm"></textarea></div>
+                            <div><label class="block text-xs @md:text-sm font-bold text-slate-700 mb-1 @md:mb-2">મહત્તમ ડિગ્રી/લાયકાત</label><input type="text" id="cvEduDegree" class="w-full p-2.5 @md:p-3.5 rounded-xl border border-slate-200 text-xs @md:text-sm"></div>
+                            <div><label class="block text-xs @md:text-sm font-bold text-slate-700 mb-1 @md:mb-2">શાળા / યુનિવર્સિટી</label><input type="text" id="cvEduSchool" class="w-full p-2.5 @md:p-3.5 rounded-xl border border-slate-200 text-xs @md:text-sm"></div>
+                            <div><label class="block text-xs @md:text-sm font-bold text-slate-700 mb-1 @md:mb-2">ઉત્તીર્ણ વર્ષ</label><input type="number" id="cvEduYear" class="w-full p-2.5 @md:p-3.5 rounded-xl border border-slate-200 text-xs @md:text-sm"></div>
+                            <div><label class="block text-xs @md:text-sm font-bold text-slate-700 mb-1 @md:mb-2">ટકાવારી / CGPA</label><input type="text" id="cvEduPercent" class="w-full p-2.5 @md:p-3.5 rounded-xl border border-slate-200 text-xs @md:text-sm"></div>
+                        </div>
+                    </div>
+                    <div id="cvStep3" class="space-y-4 @md:space-y-6 hidden">
+                        <div>
+                            <label class="block text-xs @md:text-sm font-bold text-slate-700 mb-1 @md:mb-2">નોકરીનો અનુભવ</label>
+                            <select id="cvExperience" class="w-full p-2.5 @md:p-3.5 rounded-xl border border-slate-200 text-xs @md:text-sm" onchange="window.toggleExperienceField()">
+                                <option value="ફ્રેશર">ફ્રેશર (Fresher)</option>
+                                <option value="અનુભવી">અનુભવી (Experienced)</option>
+                            </select>
+                        </div>
+                        <div id="experienceDetailsField" class="hidden"><textarea id="cvExpDetails" rows="2" class="w-full p-2.5 @md:p-3.5 rounded-xl border text-xs @md:text-sm" placeholder="અનુભવ વિગત..."></textarea></div>
+                        <div><label class="block text-xs @md:text-sm font-bold text-slate-700 mb-1 @md:mb-2">કુશળતાઓ (Skills)</label><input type="text" id="cvSkills" value="કમ્પ્યુટર જ્ઞાન, MS Office" class="w-full p-2.5 @md:p-3.5 rounded-xl border text-xs @md:text-sm"></div>
+                    </div>
+                    <div class="flex space-x-3 @md:space-x-5 pt-4 @md:pt-6 border-t">
+                        <button type="button" id="btnCvPrev" onclick="window.navigateCvStep(-1)" class="flex-1 py-3 @md:py-4 bg-slate-100 font-bold rounded-xl text-xs @md:text-sm hidden">પાછળ</button>
+                        <button type="button" id="btnCvNext" onclick="window.navigateCvStep(1)" class="flex-1 py-3 @md:py-4 bg-indigo-600 text-white font-bold rounded-xl text-xs @md:text-sm">આગળ</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- PRINT PREVIEW OVERLAY FOR CV -->
+        <div id="printArea" class="hidden bg-white p-8 max-w-2xl mx-auto shadow-lg border border-slate-200 my-8 rounded-xl text-left z-50 relative"></div>
+
+        <!-- Toast Notification -->
+        <div id="toastMessage" class="app-toast left-1/2 transform -translate-x-1/2 -bottom-20 opacity-0 bg-slate-800 text-white px-6 py-3.5 rounded-2xl shadow-xl transition-all duration-300 flex items-center space-x-3 pointer-events-none w-max max-w-[85%] text-xs @md:text-sm font-semibold">
+            <span id="toastText">મેસેજ...</span>
+        </div>
+
+    </div> <!-- End Main App Wrapper -->
+
+    <script>
+        // GLOBALS
+        let activeTab = 'home';
+        let homeFilter = 'All';
+        let catalogFilter = 'All';
+        let currentCvStep = 1;
+        let uploadedPhotoBase64 = '';
+
+        // DATASETS — sitaram_data.js ફાઈલ માંથી આવે છે
+
+        // RENDERERS
+        function renderHome() {
+            const container = document.getElementById('feedList');
+            container.innerHTML = '';
+            const filtered = sitaramCatalogData.filter(i => homeFilter === 'All' || i.category === homeFilter);
+            filtered.forEach(item => {
+                container.innerHTML += `
+                    <div class="bg-white/95 p-5 @md:p-8 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                        <div class="flex justify-between items-start mb-3 @md:mb-5"><span class="px-2.5 py-0.5 @md:px-3 @md:py-1 ${item.badge} text-[10px] @md:text-sm rounded font-bold uppercase">${item.type}</span><span class="text-[10px] @md:text-sm font-semibold text-slate-500">${item.tag}</span></div>
+                        <h3 class="font-bold text-sm @md:text-xl mb-2 @md:mb-3">${item.title}</h3>
+                        <p class="text-xs @md:text-base text-slate-600 mb-4 @md:mb-6">${item.benefit}</p>
+                        <div class="border-t border-slate-100 pt-3 @md:pt-5 flex justify-between"><button onclick="window.openDetailModal(${item.id}, 'catalog')" class="px-4 py-2 @md:px-6 @md:py-3 bg-blue-600 text-white rounded-xl text-xs @md:text-base font-bold w-full sm:w-auto text-center shadow-sm">વિગતવાર જુઓ</button></div>
+                    </div>`;
+            });
+        }
+
+        function renderCatalog() {
+            const container = document.getElementById('catalogList');
+            container.innerHTML = '';
+            const filtered = catalogFilter === 'All'
+                ? sitaramCatalogData
+                : sitaramCatalogData.filter(i => i.category === catalogFilter);
+
+            // Header અને Reset button update
+            const headerLabels = { 'All': 'તમામ ઓનલાઇન સેવાઓ', 'Card': 'આઇડી કાર્ડ સેવાઓ', 'Certificate': 'દાખલા / સર્ટિફિકેટ્સ', 'Govt': 'સરકારી કલ્યાણ યોજના', 'Ration': 'રેશન કાર્ડ સેવાઓ' };
+            const header = document.getElementById('catalogSubHeader');
+            const resetBtn = document.getElementById('resetCatalogBtn');
+            if (header) header.textContent = headerLabels[catalogFilter] || 'તમામ ઓનલાઇન સેવાઓ';
+            if (resetBtn) resetBtn.classList.toggle('hidden', catalogFilter === 'All');
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<p class="text-slate-400 text-sm col-span-3 py-6 text-center">આ વિભાગમાં હાલ કોઈ સેવા ઉપલબ્ધ નથી.</p>`;
+                return;
+            }
+
+            filtered.forEach(item => {
+                let iconColor = item.category === 'Certificate' ? 'bg-emerald-100 text-emerald-700' : (item.category === 'Govt' ? 'bg-orange-100 text-orange-700' : item.category === 'Ration' ? 'bg-indigo-100 text-indigo-700' : 'bg-blue-100 text-blue-700');
+                container.innerHTML += `
+                    <div onclick="window.openDetailModal(${item.id}, 'catalog')" class="bg-white p-4 @md:p-6 rounded-xl border border-slate-200 hover:border-blue-500 flex items-center justify-between cursor-pointer transition-all">
+                        <div class="flex items-center space-x-3 @md:space-x-5"><div class="h-10 w-10 @md:h-16 @md:w-16 ${iconColor} rounded-xl flex items-center justify-center text-base @md:text-2xl"><i class="fa-solid fa-file-invoice"></i></div><div><h4 class="font-bold text-xs @md:text-lg">${item.title}</h4></div></div><i class="fa-solid fa-chevron-right text-slate-300 text-xs @md:text-base"></i>
+                    </div>`;
+            });
+        }
+
+        function renderBharti() {
+            const container = document.getElementById('bhartiList');
+            container.innerHTML = '';
+            sitaramBhartiData.forEach(item => {
+                container.innerHTML += `
+                    <div class="bg-white p-5 @md:p-8 rounded-2xl border border-slate-200 shadow-sm hover:border-red-400 transition-all">
+                        <div class="flex justify-between items-start mb-2 @md:mb-4"><span class="px-2 py-0.5 @md:px-3 @md:py-1 bg-red-100 text-red-700 text-[10px] @md:text-sm rounded font-bold">${item.tag}</span><span class="text-[10px] @md:text-sm font-bold text-slate-500">${item.lastDate}</span></div>
+                        <h3 class="font-bold text-sm @md:text-xl mb-3 @md:mb-5">${item.title}</h3>
+                        <div class="border-t border-slate-100 pt-3 @md:pt-5 mt-2 @md:mt-4 flex justify-between items-center"><span class="text-xs @md:text-lg font-bold text-emerald-600">${item.salary}</span><button onclick="window.openDetailModal(${item.id}, 'bharti')" class="px-4 py-2 @md:px-6 @md:py-3 bg-red-600 text-white rounded-xl text-xs @md:text-base font-bold shadow-sm">અરજીની વિગત</button></div>
+                    </div>`;
+            });
+        }
+
+        function renderCurrentAffairs() {
+            const caContainer = document.getElementById('caFeedContainer');
+            caContainer.innerHTML = '';
+            sitaramCaData.forEach(item => {
+                caContainer.innerHTML += `
+                    <div class="bg-white p-5 @md:p-8 rounded-2xl border border-slate-200 shadow-sm"><div class="flex justify-between mb-2 @md:mb-4"><span class="text-[10px] @md:text-sm text-indigo-600 font-bold bg-indigo-50 px-2 py-0.5 @md:px-3 @md:py-1 rounded">ન્યૂઝ</span><span class="text-[10px] @md:text-sm text-slate-400">${item.date}</span></div><h5 class="font-bold text-sm @md:text-xl mb-2 @md:mb-3">${item.title}</h5><p class="text-xs @md:text-base text-slate-600 mb-3 @md:mb-5">${item.desc.substring(0,80)}...</p><button onclick="window.openDetailModal(${item.id}, 'ca')" class="text-indigo-600 text-[10px] @md:text-sm font-bold">વધુ વાંચો <i class="fa-solid fa-chevron-right ml-1"></i></button></div>`;
+            });
+
+            const gkContainer = document.getElementById('gkFeedContainer');
+            gkContainer.innerHTML = '';
+            sitaramGkData.forEach(item => {
+                gkContainer.innerHTML += `
+                    <div class="bg-white p-4 @md:p-6 rounded-2xl border border-slate-200 shadow-sm">
+                        <h5 class="font-bold text-xs @md:text-lg mb-3 @md:mb-4 flex"><span class="text-amber-600 mr-2">Q:</span> ${item.question}</h5>
+                        <div id="gkAns_${item.id}" class="hidden bg-emerald-50 border border-emerald-100 rounded-xl p-3 @md:p-5 text-xs @md:text-base text-emerald-950 font-bold mb-3 @md:mb-4">${item.answer}</div>
+                        <button onclick="window.toggleGkAnswer(${item.id})" class="w-full py-2 @md:py-3 bg-slate-50 border border-slate-200 text-slate-700 font-bold rounded-xl text-xs @md:text-sm hover:bg-slate-100">જવાબ જુઓ</button>
+                    </div>`;
+            });
+        }
+
+        function renderPcStore() {
+            const container = document.getElementById('pcProductsList');
+            container.innerHTML = '';
+            sitaramPcStoreData.forEach(prod => {
+                container.innerHTML += `
+                    <div class="bg-white p-5 @md:p-8 rounded-2xl border border-slate-200 shadow-sm hover:border-teal-400 transition-all">
+                        <div class="flex justify-between items-start mb-2 @md:mb-4"><span class="px-2.5 py-0.5 @md:px-4 @md:py-1 bg-teal-600 text-white text-[9px] @md:text-xs font-bold rounded uppercase">${prod.tag}</span><span class="text-[10px] @md:text-sm text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 @md:px-3 @md:py-1 rounded-full">${prod.warranty}</span></div>
+                        <h3 class="font-bold text-sm @md:text-xl mb-1.5 @md:mb-3"><i class="fa-solid fa-laptop text-teal-600 mr-2"></i> ${prod.title}</h3>
+                        <div class="bg-slate-50 p-2 @md:p-4 rounded-lg text-[10px] @md:text-sm text-slate-600 mb-3 @md:mb-5">${prod.specs}</div>
+                        <div class="border-t border-slate-100 pt-3 @md:pt-5 flex justify-between items-center"><span class="text-base @md:text-2xl font-black text-slate-900">${prod.price}</span><button onclick="window.bookPcOrder('${prod.title}')" class="px-5 py-2.5 @md:px-6 @md:py-3 bg-teal-600 text-white text-xs @md:text-sm font-bold rounded-xl">ખરીદો</button></div>
+                    </div>`;
+            });
+        }
+
+        function render() {
+            if (activeTab === 'home') renderHome();
+            else if (activeTab === 'catalog') renderCatalog();
+            else if (activeTab === 'bharti') renderBharti();
+            else if (activeTab === 'currentAffairs') renderCurrentAffairs();
+            else if (activeTab === 'pcstore') renderPcStore();
+        }
+
+        // ACTIONS AND MODALS
+        window.switchTab = function(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabId + 'Tab').classList.add('active');
+            
+            // Adjust Desktop Tabs UI
+            document.querySelectorAll('.nav-tab').forEach(btn => btn.className = "nav-tab px-3 py-1.5 @md:px-5 @md:py-2.5 rounded-lg text-xs @md:text-sm font-semibold text-blue-100 hover:text-white hover:bg-white/5 transition-all");
+            document.querySelectorAll('.mobile-nav-tab').forEach(btn => btn.className = "mobile-nav-tab w-full text-left px-4 py-3 rounded-xl text-sm font-semibold text-blue-100 hover:bg-white/5 block");
+            
+            const tabs = ['home', 'bharti', 'catalog', 'currentAffairs', 'pcstore'];
+            const idx = tabs.indexOf(tabId);
+            if (document.querySelectorAll('.nav-tab')[idx]) document.querySelectorAll('.nav-tab')[idx].className = "nav-tab px-3 py-1.5 @md:px-5 @md:py-2.5 rounded-lg text-xs @md:text-sm font-bold text-white bg-white/10 transition-all";
+            
+            // Material You Pill
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-blue-700'); btn.classList.add('text-slate-400');
+                if (btn.querySelector('.nav-icon-wrapper')) btn.querySelector('.nav-icon-wrapper').className = "nav-icon-wrapper px-4 py-1.5 rounded-full bg-transparent transition-all mb-0.5";
+            });
+            const bottomNavBtns = document.querySelectorAll('.nav-btn');
+            if (bottomNavBtns[idx]) {
+                bottomNavBtns[idx].classList.add('text-blue-700'); bottomNavBtns[idx].classList.remove('text-slate-400');
+                if (bottomNavBtns[idx].querySelector('.nav-icon-wrapper')) bottomNavBtns[idx].querySelector('.nav-icon-wrapper').className = "nav-icon-wrapper px-5 py-1.5 rounded-full bg-blue-100 text-blue-800 transition-all mb-0.5 shadow-sm active-pill";
+            }
+
+            activeTab = tabId;
+            const appArea = document.getElementById('scrollableAppArea');
+            if (appArea) appArea.scrollTo({ top: 0, behavior: 'smooth' });
+            render();
+        }
+
+        window.openDetailModal = function(id, type) {
+            let item;
+            const modal = document.getElementById('detailModal');
+            if (type === 'catalog') {
+                item = sitaramCatalogData.find(i => i.id === id);
+                document.getElementById('modalBadge').textContent = item.type;
+                document.getElementById('modalTitle').textContent = item.title;
+                document.getElementById('modalCompany').innerHTML = `<i class="fa-solid fa-building mr-1.5"></i> ${item.company}`;
+                document.getElementById('modalBenefitTitle').innerHTML = `<i class="fa-solid fa-star text-amber-500 mr-2"></i> મુખ્ય લાભ:`;
+                document.getElementById('modalBenefit').textContent = item.benefit;
+                document.getElementById('modalDocsWrapper').classList.remove('hidden');
+                document.getElementById('modalDocs').innerHTML = item.documents.map(d => `<li class="flex text-[11px] @md:text-base"><i class="fa-solid fa-check text-emerald-500 mr-2 mt-0.5 @md:mt-1"></i>${d}</li>`).join('');
+            } else if (type === 'bharti') {
+                item = sitaramBhartiData.find(i => i.id === id);
+                document.getElementById('modalBadge').textContent = "સરકારી નોકરી";
+                document.getElementById('modalTitle').textContent = item.title;
+                document.getElementById('modalCompany').innerHTML = `<i class="fa-solid fa-briefcase text-red-500 mr-1.5"></i> ${item.board}`;
+                document.getElementById('modalBenefitTitle').innerHTML = `<i class="fa-solid fa-info-circle text-amber-500 mr-2"></i> ભરતી વિગત:`;
+                document.getElementById('modalBenefit').innerHTML = `લાયકાત: ${item.eligibility} <br> પગાર: ${item.salary}`;
+                document.getElementById('modalDocsWrapper').classList.remove('hidden');
+                document.getElementById('modalDocs').innerHTML = item.requirements.map(d => `<li class="flex text-[11px] @md:text-base"><i class="fa-solid fa-check text-red-500 mr-2 mt-0.5 @md:mt-1"></i>${d}</li>`).join('');
+            } else if (type === 'ca') {
+                item = sitaramCaData.find(i => i.id === id);
+                document.getElementById('modalBadge').textContent = "તાજા સમાચાર";
+                document.getElementById('modalTitle').textContent = item.title;
+                document.getElementById('modalCompany').innerHTML = `<i class="fa-regular fa-clock mr-1.5"></i> ${item.date}`;
+                document.getElementById('modalBenefitTitle').innerHTML = `<i class="fa-solid fa-newspaper text-indigo-500 mr-2"></i> અહેવાલ:`;
+                document.getElementById('modalBenefit').textContent = item.desc;
+                document.getElementById('modalDocsWrapper').classList.add('hidden');
+            }
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.querySelector('div').classList.remove('scale-95'), 10);
+        }
+
+        window.closeDetailModal = function() {
+            document.getElementById('detailModal').querySelector('div').classList.add('scale-95');
+            setTimeout(() => document.getElementById('detailModal').classList.add('hidden'), 200);
+        }
+
+        window.openAboutModal = function() {
+            document.getElementById('aboutModal').classList.remove('hidden');
+            setTimeout(() => document.getElementById('aboutModal').querySelector('div').classList.remove('scale-95'), 10);
+        }
+        window.closeAboutModal = function() {
+            document.getElementById('aboutModal').querySelector('div').classList.add('scale-95');
+            setTimeout(() => document.getElementById('aboutModal').classList.add('hidden'), 200);
+        }
+
+        window.toggleGkAnswer = function(id) {
+            const ansDiv = document.getElementById(`gkAns_${id}`);
+            ansDiv.classList.toggle('hidden');
+        }
+
+        window.bookPcOrder = function(title) {
+            window.showToast(`ઓર્ડર શરૂ: ${title}`);
+            window.open(`https://wa.me/?text=મારે આ ખરીદવું છે: ${title}`, '_blank');
+        }
+
+        window.showToast = function(msg) {
+            const t = document.getElementById('toastMessage');
+            document.getElementById('toastText').textContent = msg;
+            t.classList.add('toast-show');
+            setTimeout(() => t.classList.remove('toast-show'), 2500);
+        }
+
+        window.toggleMobileMenu = function() { document.getElementById('mobileMenu').classList.toggle('hidden'); }
+        window.openSidebar = function() { document.getElementById('sidebarOverlay').classList.remove('hidden'); document.getElementById('sidebar').classList.remove('-translate-x-full'); }
+        window.closeSidebar = function() { document.getElementById('sidebarOverlay').classList.add('hidden'); document.getElementById('sidebar').classList.add('-translate-x-full'); }
+        window.filterCatalogByCategory = function(cat) { catalogFilter = cat; renderCatalog(); window.switchTab('catalog'); }
+        window.resetCatalogFilter = function() { catalogFilter = 'All'; renderCatalog(); }
+
+        // ==========================================
+        // BIODATA MAKER (CV GENERATOR) FULL LOGIC
+        // ==========================================
+        window.openBiodataBuilder = function() {
+            currentCvStep = 1;
+            uploadedPhotoBase64 = '';
+            document.getElementById('cvPhotoInput').value = '';
+            document.getElementById('formPhotoPreview').classList.add('hidden');
+            document.getElementById('cvForm').reset();
+            document.getElementById('biodataModal').classList.remove('hidden');
+            updateCvStepUI();
+        }
+
+        window.closeBiodataBuilder = function() {
+            document.getElementById('biodataModal').classList.add('hidden');
+        }
+
+        window.handlePhotoUpload = function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedPhotoBase64 = e.target.result;
+                    document.getElementById('formPhotoPreviewImg').src = uploadedPhotoBase64;
+                    document.getElementById('formPhotoPreview').classList.remove('hidden');
+                    window.showToast("ફોટો અપલોડ થયો!");
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        window.toggleExperienceField = function() {
+            const expField = document.getElementById('experienceDetailsField');
+            if (document.getElementById('cvExperience').value === 'અનુભવી') expField.classList.remove('hidden');
+            else expField.classList.add('hidden');
+        }
+
+        window.navigateCvStep = function(dir) {
+            if (dir === 1) {
+                if (currentCvStep === 1) {
+                    if (!document.getElementById('cvName').value) return window.showToast('પૂરું નામ ભરો!');
+                }
+            }
+            currentCvStep += dir;
+            if (currentCvStep > 3) {
+                generateAndPrintCv();
+                return;
+            }
+            updateCvStepUI();
+        }
+
+        function updateCvStepUI() {
+            for(let i=1; i<=3; i++) {
+                document.getElementById('cvStep'+i).classList.add('hidden');
+                let indicator = document.getElementById('stepIndicator'+i);
+                if (i <= currentCvStep) {
+                    indicator.classList.add('text-indigo-600'); indicator.classList.remove('text-slate-400');
+                    indicator.querySelector('span').classList.add('bg-indigo-600', 'text-white'); indicator.querySelector('span').classList.remove('bg-slate-200', 'text-slate-600');
+                } else {
+                    indicator.classList.remove('text-indigo-600'); indicator.classList.add('text-slate-400');
+                    indicator.querySelector('span').classList.remove('bg-indigo-600', 'text-white'); indicator.querySelector('span').classList.add('bg-slate-200', 'text-slate-600');
+                }
+            }
+            document.getElementById('cvStep'+currentCvStep).classList.remove('hidden');
+            document.getElementById('btnCvPrev').classList.toggle('hidden', currentCvStep === 1);
+            document.getElementById('btnCvNext').textContent = currentCvStep === 3 ? "પ્રિન્ટ કરો / PDF ડાઉનલોડ" : "આગળ";
+        }
+
+        function generateAndPrintCv() {
+            const name = document.getElementById('cvName').value || 'નામ દાખલ કરેલ નથી';
+            const fName = document.getElementById('cvFather').value || '-';
+            const phone = document.getElementById('cvPhone').value || '-';
+            const email = document.getElementById('cvEmail').value || '-';
+            const address = document.getElementById('cvAddress').value || '-';
+            const degree = document.getElementById('cvEduDegree').value || '-';
+            const school = document.getElementById('cvEduSchool').value || '-';
+            const skills = document.getElementById('cvSkills').value.split(',').map(s=>`<li class="flex items-center"><span class="h-1.5 w-1.5 rounded-full bg-blue-600 mr-2 shrink-0"></span> ${s.trim()}</li>`).join('');
+            const expSelect = document.getElementById('cvExperience').value;
+            const expDetails = document.getElementById('cvExpDetails').value;
+            const experienceHtml = (expSelect === 'અનુભવી' && expDetails) ? expDetails.replace(/\n/g, "<br>") : "હું ફ્રેશર છું (નવો ઉમેદવાર)";
+            
+            const dob = document.getElementById('cvDob').value;
+            let formattedDob = dob;
+            if(dob){ const d = new Date(dob); formattedDob = `${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}`; }
+            const gender = document.getElementById('cvGender').value;
+            const marital = document.getElementById('cvMarital').value;
+            const caste = document.getElementById('cvCaste').value || "લાગુ પડતું નથી";
+            const lang = document.getElementById('cvLang').value || "ગુજરાતી";
+
+            let photoHtml = uploadedPhotoBase64 ? 
+                `<img src="${uploadedPhotoBase64}" class="h-28 w-24 object-cover border border-gray-300 shadow">` : 
+                `<div class="h-28 w-24 border border-dashed border-gray-400 flex items-center justify-center text-[10px] text-gray-400 text-center p-2">પાસપોર્ટ ફોટો ચોંટાડો</div>`;
+
+            const printArea = document.getElementById('printArea');
+            printArea.innerHTML = `
+                <div class="border-b-4 border-blue-800 pb-4 flex justify-between">
+                    <div><h1 class="text-3xl font-black uppercase tracking-wide text-slate-900">${name}</h1><p class="text-sm font-bold text-blue-700 tracking-widest mt-1">CURRICULUM VITAE</p></div>
+                    ${photoHtml}
+                </div>
+                <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="md:col-span-1 border-r border-gray-200 pr-4 space-y-5 text-xs text-slate-700">
+                        <div>
+                            <h3 class="font-bold border-b pb-1.5 mb-2 uppercase tracking-wider text-slate-900">સંપર્ક માહિતી</h3>
+                            <ul class="space-y-2 font-semibold">
+                                <li class="flex items-start"><i class="fa-solid fa-phone text-blue-600 mr-2 mt-0.5"></i> ${phone}</li>
+                                <li class="flex items-start"><i class="fa-solid fa-envelope text-blue-600 mr-2 mt-0.5"></i> <span class="break-all">${email}</span></li>
+                                <li class="flex items-start"><i class="fa-solid fa-location-dot text-blue-600 mr-2 mt-0.5"></i> ${address}</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="font-bold border-b pb-1.5 mb-2 uppercase tracking-wider text-slate-900 mt-4">વ્યક્તિગત વિગત</h3>
+                            <ul class="space-y-1.5">
+                                <li><strong>પિતા:</strong> ${fName}</li>
+                                <li><strong>જન્મ તારીખ:</strong> ${formattedDob}</li>
+                                <li><strong>જાતિ:</strong> ${gender}</li>
+                                <li><strong>વૈવાહિક સ્થિતિ:</strong> ${marital}</li>
+                                <li><strong>ધર્મ/જ્ઞાતિ:</strong> ${caste}</li>
+                                <li><strong>ભાષાઓ:</strong> ${lang}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="md:col-span-2 space-y-6 text-xs text-slate-700">
+                        <div>
+                            <h3 class="font-bold border-b pb-1.5 mb-2.5 uppercase tracking-wider text-slate-900">શૈક્ષણિક લાયકાત</h3>
+                            <div class="bg-slate-50 p-3 border border-slate-100 rounded-lg"><p class="font-bold text-sm text-slate-900">${degree}</p><p class="text-slate-600 mt-0.5">${school}</p></div>
+                        </div>
+                        <div>
+                            <h3 class="font-bold border-b pb-1.5 mb-2.5 uppercase tracking-wider text-slate-900">અનુભવ (Experience)</h3>
+                            <div class="bg-slate-50 p-3 border border-slate-100 rounded-lg leading-relaxed">${experienceHtml}</div>
+                        </div>
+                        <div>
+                            <h3 class="font-bold border-b pb-1.5 mb-2.5 uppercase tracking-wider text-slate-900">સ્કિલ્સ (Skills)</h3>
+                            <ul class="grid grid-cols-2 gap-2 font-semibold">${skills}</ul>
+                        </div>
+                        <div class="pt-4 mt-8 border-t border-slate-200">
+                            <p class="text-[10px] text-slate-400 italic mb-6">હું પ્રમાણિત કરું છું કે ઉપર દર્શાવેલ તમામ વિગતો મારી પૂરી સમજ મુજબ સાચી છે.</p>
+                            <div class="flex justify-between items-center"><span class="font-semibold text-slate-500">તારીખ: _________</span><span class="font-semibold text-slate-500 border-t border-slate-400 pt-1 px-4">અરજદારની સહી</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-8 pt-4 border-t text-xs flex justify-between no-print gap-4">
+                    <button onclick="document.getElementById('printArea').classList.add('hidden'); document.getElementById('biodataModal').classList.remove('hidden');" class="bg-slate-100 px-4 py-2.5 font-bold rounded-xl text-slate-700 hover:bg-slate-200 transition-all flex-1">બિલ્ડર પર પાછા જાઓ</button>
+                    <button onclick="window.print()" class="bg-indigo-600 text-white px-4 py-2.5 font-bold rounded-xl shadow hover:bg-indigo-700 transition-all flex-1 flex items-center justify-center"><i class="fa-solid fa-print mr-2"></i> PDF ડાઉનલોડ કરો</button>
+                </div>
+            `;
+            
+            document.getElementById('biodataModal').classList.add('hidden');
+            printArea.classList.remove('hidden');
+            printArea.scrollIntoView({ behavior: 'smooth' });
+            window.showToast('બાયોડેટા તૈયાર છે. નીચે પ્રિન્ટ બટન દબાવો.');
+        }
+
+        // INIT
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => { b.classList.remove('bg-blue-600', 'text-white'); b.classList.add('bg-white', 'text-slate-600'); });
+                btn.classList.add('bg-blue-600', 'text-white');
+                homeFilter = btn.getAttribute('data-filter');
+                renderHome();
+            });
+        });
+        window.switchTab('home');
+    </script>
+</body>
+</html>
