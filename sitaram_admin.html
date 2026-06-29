@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>સીતારામ એડ્મિન પેનલ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Vadodara:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Hind Vadodara', sans-serif; background: #f1f5f9; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .sidebar-item.active { background: #1e40af; color: white; }
+        input, textarea, select { outline: none; }
+        input:focus, textarea:focus, select:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
+        .badge-card { background: #1d4ed8; color: white; }
+        .badge-cert { background: #059669; color: white; }
+        .badge-govt { background: #ea580c; color: white; }
+        .badge-ration { background: #4338ca; color: white; }
+        .badge-bharti { background: #dc2626; color: white; }
+        .badge-ca { background: #7c3aed; color: white; }
+        .badge-gk { background: #d97706; color: white; }
+        .badge-pc { background: #0d9488; color: white; }
+    </style>
+</head>
+<body class="antialiased">
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-800 to-indigo-900 p-4">
+    <div class="bg-white rounded-3xl p-8 w-full max-w-sm shadow-2xl">
+        <div class="text-center mb-7">
+            <div class="h-16 w-16 bg-blue-100 text-blue-700 rounded-2xl flex items-center justify-center mx-auto mb-3 text-2xl">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <h1 class="text-2xl font-black text-slate-900">સીતારામ એડ્મિન</h1>
+            <p class="text-sm text-slate-400 mt-1">Admin Panel Login</p>
+        </div>
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-bold text-slate-700 mb-1.5">પાસવર્ડ</label>
+                <input type="password" id="loginPass" placeholder="પાસવર્ડ દાખલ કરો"
+                    class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm"
+                    onkeydown="if(event.key==='Enter') doLogin()">
+            </div>
+            <button onclick="doLogin()" class="w-full py-3 bg-blue-700 text-white font-bold rounded-xl text-sm hover:bg-blue-800 transition">
+                <i class="fa-solid fa-right-to-bracket mr-2"></i> લૉગ ઇન કરો
+            </button>
+            <p id="loginErr" class="text-red-600 text-xs text-center hidden">❌ પાસવર્ડ ખોટો છે</p>
+        </div>
+    </div>
+</div>
+
+<!-- ADMIN PANEL (hidden until login) -->
+<div id="adminPanel" class="hidden min-h-screen flex flex-col">
+
+    <!-- Top Bar -->
+    <header class="bg-gradient-to-r from-blue-800 to-indigo-900 text-white px-6 py-4 flex justify-between items-center shadow-lg sticky top-0 z-40">
+        <div class="flex items-center space-x-3">
+            <div class="h-9 w-9 bg-white/20 rounded-xl flex items-center justify-center">
+                <i class="fa-solid fa-sliders text-sm"></i>
+            </div>
+            <div>
+                <h1 class="font-black text-base leading-none">સીતારામ ઓનલાઇન</h1>
+                <span class="text-[10px] text-blue-200 font-semibold">Admin Control Panel</span>
+            </div>
+        </div>
+        <div class="flex items-center space-x-3">
+            <button onclick="exportData()" class="bg-emerald-600 hover:bg-emerald-700 px-4 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-2">
+                <i class="fa-solid fa-file-export"></i><span class="hidden sm:inline">JS Export</span>
+            </button>
+            <button onclick="doLogout()" class="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-xl text-xs font-bold transition">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden">
+
+        <!-- Sidebar -->
+        <aside class="w-52 bg-white border-r border-slate-200 flex-shrink-0 flex flex-col shadow-sm hidden md:flex">
+            <nav class="flex-1 py-4 px-3 space-y-1">
+                <button onclick="showSection('dashboard')" class="sidebar-item active w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold transition flex items-center space-x-2.5">
+                    <i class="fa-solid fa-gauge-high w-4 text-center"></i><span>ડૅશબૉર્ડ</span>
+                </button>
+                <button onclick="showSection('catalog')" class="sidebar-item w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-100 transition flex items-center space-x-2.5">
+                    <i class="fa-solid fa-list-ul w-4 text-center text-blue-600"></i><span>સર્વિસ કેટેલોગ</span>
+                </button>
+                <button onclick="showSection('bharti')" class="sidebar-item w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-100 transition flex items-center space-x-2.5">
+                    <i class="fa-solid fa-briefcase w-4 text-center text-red-600"></i><span>સરકારી ભરતી</span>
+                </button>
+                <button onclick="showSection('ca')" class="sidebar-item w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-100 transition flex items-center space-x-2.5">
+                    <i class="fa-solid fa-newspaper w-4 text-center text-purple-600"></i><span>કરંટ અફેર્સ</span>
+                </button>
+                <button onclick="showSection('gk')" class="sidebar-item w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-100 transition flex items-center space-x-2.5">
+                    <i class="fa-solid fa-circle-question w-4 text-center text-amber-600"></i><span>GK ક્વિઝ</span>
+                </button>
+                <button onclick="showSection('pcstore')" class="sidebar-item w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-100 transition flex items-center space-x-2.5">
+                    <i class="fa-solid fa-laptop w-4 text-center text-teal-600"></i><span>PC સ્ટોર</span>
+                </button>
+            </nav>
+            <div class="p-4 border-t border-slate-100">
+                <p class="text-[10px] text-slate-400 text-center">v1.0 · Sitaram Tech Support</p>
+            </div>
+        </aside>
+
+        <!-- Mobile Bottom Nav -->
+        <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 flex md:hidden z-30">
+            <button onclick="showSection('dashboard')" class="mobile-nav flex-1 py-3 flex flex-col items-center text-blue-700 text-[9px] font-bold"><i class="fa-solid fa-gauge-high text-base mb-0.5"></i>ડૅશ</button>
+            <button onclick="showSection('catalog')" class="mobile-nav flex-1 py-3 flex flex-col items-center text-slate-400 text-[9px] font-semibold"><i class="fa-solid fa-list-ul text-base mb-0.5"></i>સેવા</button>
+            <button onclick="showSection('bharti')" class="mobile-nav flex-1 py-3 flex flex-col items-center text-slate-400 text-[9px] font-semibold"><i class="fa-solid fa-briefcase text-base mb-0.5"></i>ભરતી</button>
+            <button onclick="showSection('ca')" class="mobile-nav flex-1 py-3 flex flex-col items-center text-slate-400 text-[9px] font-semibold"><i class="fa-solid fa-newspaper text-base mb-0.5"></i>ન્યૂઝ</button>
+            <button onclick="showSection('gk')" class="mobile-nav flex-1 py-3 flex flex-col items-center text-slate-400 text-[9px] font-semibold"><i class="fa-solid fa-circle-question text-base mb-0.5"></i>GK</button>
+            <button onclick="showSection('pcstore')" class="mobile-nav flex-1 py-3 flex flex-col items-center text-slate-400 text-[9px] font-semibold"><i class="fa-solid fa-laptop text-base mb-0.5"></i>PC</button>
+        </div>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto px-4 py-6 md:px-8 pb-20 md:pb-8">
+
+            <!-- DASHBOARD -->
+            <div id="sec-dashboard" class="tab-content active space-y-6">
+                <h2 class="text-xl font-black text-slate-900">ડૅશબૉર્ડ</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="statsGrid"></div>
+                <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+                    <h3 class="font-bold text-slate-800 mb-4 text-sm flex items-center"><i class="fa-solid fa-circle-info text-blue-600 mr-2"></i> Admin Panel વિશે</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">આ Panel માં ફેરફાર કરો, Export JS બટન દબાવો, અને generate થયેલ <strong>sitaram_data.js</strong> ફાઈલ replace કરો. HTML ફાઈલ touch કરવાની જરૂર નથી.</p>
+                    <div class="mt-4 bg-blue-50 rounded-xl p-4 text-xs text-blue-800 font-semibold space-y-1.5">
+                        <p><i class="fa-solid fa-1 mr-2 text-blue-500"></i> ડેટા edit/add/delete કરો</p>
+                        <p><i class="fa-solid fa-2 mr-2 text-blue-500"></i> ઉપર "JS Export" બટન દબાવો</p>
+                        <p><i class="fa-solid fa-3 mr-2 text-blue-500"></i> Download થયેલ ફાઈલ <code class="bg-white px-1.5 py-0.5 rounded">sitaram_data.js</code> replace કરો</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CATALOG -->
+            <div id="sec-catalog" class="tab-content space-y-5">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-xl font-black text-slate-900"><i class="fa-solid fa-list-ul text-blue-600 mr-2"></i> સર્વિસ કેટેલોગ</h2>
+                    <button onclick="openModal('catalog', null)" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-blue-700 transition flex items-center space-x-1.5">
+                        <i class="fa-solid fa-plus"></i><span>નવી ઉમેરો</span>
+                    </button>
+                </div>
+                <div id="catalogList" class="space-y-3"></div>
+            </div>
+
+            <!-- BHARTI -->
+            <div id="sec-bharti" class="tab-content space-y-5">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-xl font-black text-slate-900"><i class="fa-solid fa-briefcase text-red-600 mr-2"></i> સરકારી ભરતી</h2>
+                    <button onclick="openModal('bharti', null)" class="bg-red-600 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-red-700 transition flex items-center space-x-1.5">
+                        <i class="fa-solid fa-plus"></i><span>નવી ઉમેરો</span>
+                    </button>
+                </div>
+                <div id="bhartiList" class="space-y-3"></div>
+            </div>
+
+            <!-- CURRENT AFFAIRS -->
+            <div id="sec-ca" class="tab-content space-y-5">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-xl font-black text-slate-900"><i class="fa-solid fa-newspaper text-purple-600 mr-2"></i> કરંટ અફેર્સ</h2>
+                    <button onclick="openModal('ca', null)" class="bg-purple-600 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-purple-700 transition flex items-center space-x-1.5">
+                        <i class="fa-solid fa-plus"></i><span>નવું ઉમેરો</span>
+                    </button>
+                </div>
+                <div id="caList" class="space-y-3"></div>
+            </div>
+
+            <!-- GK -->
+            <div id="sec-gk" class="tab-content space-y-5">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-xl font-black text-slate-900"><i class="fa-solid fa-circle-question text-amber-600 mr-2"></i> GK ક્વિઝ</h2>
+                    <button onclick="openModal('gk', null)" class="bg-amber-600 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-amber-700 transition flex items-center space-x-1.5">
+                        <i class="fa-solid fa-plus"></i><span>નવો ઉમેરો</span>
+                    </button>
+                </div>
+                <div id="gkList" class="space-y-3"></div>
+            </div>
+
+            <!-- PC STORE -->
+            <div id="sec-pcstore" class="tab-content space-y-5">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-xl font-black text-slate-900"><i class="fa-solid fa-laptop text-teal-600 mr-2"></i> PC / Laptop સ્ટોર</h2>
+                    <button onclick="openModal('pcstore', null)" class="bg-teal-600 text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-teal-700 transition flex items-center space-x-1.5">
+                        <i class="fa-solid fa-plus"></i><span>નવો ઉમેરો</span>
+                    </button>
+                </div>
+                <div id="pcList" class="space-y-3"></div>
+            </div>
+
+        </main>
+    </div>
+</div>
+
+<!-- MODAL (Edit/Add) -->
+<div id="editModal" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-3xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-6 shadow-2xl">
+        <div class="flex justify-between items-center mb-5">
+            <h3 id="modalTitle" class="text-lg font-black text-slate-900">ફેરફાર</h3>
+            <button onclick="closeModal()" class="h-9 w-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="modalForm" class="space-y-4"></div>
+        <div class="flex space-x-3 mt-6 pt-5 border-t border-slate-100">
+            <button onclick="closeModal()" class="flex-1 py-3 bg-slate-100 font-bold rounded-xl text-sm text-slate-700">રદ કરો</button>
+            <button onclick="saveItem()" class="flex-1 py-3 bg-blue-600 text-white font-bold rounded-xl text-sm hover:bg-blue-700">સાચવો</button>
+        </div>
+    </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-6 py-3 rounded-2xl shadow-xl text-sm font-semibold opacity-0 transition-opacity duration-300 pointer-events-none z-50"></div>
+
+<script>
+// ===================== CONFIG =====================
+const ADMIN_PASSWORD = "sitaram2024"; // ← અહીં પાસવર્ડ બદલો
+
+// ===================== DEFAULT DATA =====================
+const DEFAULT_DATA = {
+    catalog: [
+        { id: 1, title: "આધાર કાર્ડ સુધારા અને લિંકિંગ", company: "UIDAI", category: "Card", type: "આઇડી કાર્ડ", benefit: "આધાર કાર્ડમાં તમારું નામ, સરનામું, જન્મ તારીખ અને મોબાઇલ નંબર સુધારવા અથવા પાન કાર્ડ સાથે કનેક્ટ કરવાની સચોટ વિગતવાર ગાઇડલાઇન.", documents: ["ઓળખનો નવો પુરાવો", "રહેઠાણનો નવો પુરાવો", "શાળા છોડ્યાનું પ્રમાણપત્ર"], tag: "આધાર કાર્ડ", badge: "bg-blue-600 text-white" },
+        { id: 2, title: "નવું પાન કાર્ડ ઓનલાઇન", company: "Income Tax", category: "Card", type: "આઇડી કાર્ડ", benefit: "માત્ર ૧૦ મિનિટમાં ડિજિટલ ઇ-પાન કાર્ડ મેળવો અથવા ફિઝિકલ પીવીસી પ્લાસ્ટિક કાર્ડ સીધું ઘરે મંગાવવાની સંપૂર્ણ પ્રક્રિયા.", documents: ["મોબાઇલ નંબર લિંક આધાર કાર્ડ", "એક સહી (સિગ્નેચર)", "પાસપોર્ટ સાઇઝનો ફોટો"], tag: "પાન કાર્ડ", badge: "bg-purple-600 text-white" },
+        { id: 3, title: "આવકનો દાખલો", company: "ડિજિટલ ગુજરાત પોર્ટલ", category: "Certificate", type: "સર્ટિફિકેટ", benefit: "તમામ સરકારી યોજનાઓ માટે મામલતદારનો આવકનો દાખલો મેળવવાની ગાઇડલાઇન.", documents: ["તલાટી રૂબરૂ પંચનામું", "આવક અંગેનું સ્વ-ઘોષણાપત્ર", "રેશન કાર્ડ અને આધાર કાર્ડ"], tag: "મામલતદાર સેવા", badge: "bg-emerald-600 text-white" },
+        { id: 4, title: "આયુષ્માન કાર્ડ", company: "National Health Authority", category: "Govt", type: "સરકારી યોજના", benefit: "લાભાર્થી પરિવારો માટે વાર્ષિક રૂ. ૧૦,૦૦,૦૦૦ સુધીની મફત હોસ્પિટલ સારવાર.", documents: ["આધાર કાર્ડ (મોબાઇલ લિંક હોવો ફરજિયાત)", "રેશન કાર્ડ"], tag: "પીએમ જેએવાય", badge: "bg-red-600 text-white" },
+        { id: 5, title: "કુંવરબાઈનું મામેરું યોજના", company: "સામાજિક ન્યાય વિભાગ", category: "Govt", type: "સરકારી યોજના", benefit: "કન્યાઓના લગ્ન પ્રસંગે સરકારશ્રી તરફથી રૂ. ૧૨,૦૦૦ ની આર્થિક સહાય.", documents: ["કન્યા અને પિતાનું આધાર કાર્ડ", "લગ્ન નોંધણી પ્રમાણપત્ર", "આવકનો દાખલો"], tag: "મહિલા કલ્યાણ", badge: "bg-orange-600 text-white" },
+        { id: 6, title: "રેશન કાર્ડ નામ સુધારો / નવું", company: "ડિજિટલ ગુજરાત પોર્ટલ", category: "Ration", type: "રેશન કાર્ડ", benefit: "રેશન કાર્ડમાં નવું નામ ઉમેરવું, નામ સુધારવું અથવા નવું APL/BPL રેશન કાર્ડ બનાવડાવવા માટેની સંપૂર્ણ ઓનલાઇન ગાઇડલાઇન.", documents: ["આધાર કાર્ડ (તમામ સભ્યોના)", "આવકનો દાખલો", "ઘર માલિકીનો પુરાવો / ભાડા કરાર"], tag: "રેશન કાર્ડ", badge: "bg-indigo-600 text-white" },
+        { id: 7, title: "રેશન કાર્ડ સરનામા ફેરફાર", company: "ડિજિટલ ગુજરાત પોર્ટલ", category: "Ration", type: "રેશન કાર્ડ", benefit: "જૂના ઘર / શહેરથી નવા ઘર / શહેરમાં ગયા હોય ત્યારે રેશન કાર્ડ ટ્રાન્સફર અથવા સરનામું બદલવાની સચોટ પ્રક્રિયા.", documents: ["જૂનું રેશન કાર્ડ", "નવા સરનામાનો પુરાવો (વીજળી બિલ / આધાર)", "તલાટી પ્રમાણપત્ર"], tag: "રેશન ટ્રાન્સફર", badge: "bg-indigo-600 text-white" }
+    ],
+    bharti: [
+        { id: 101, title: "ગુજરાત પોલીસ કોન્સ્ટેબલ ભરતી ૨૦૨૬", board: "GPRB", totalJobs: "૧૨,૪૬૨ જગ્યાઓ", eligibility: "ધોરણ ૧૨ પાસ", lastDate: "૧૫-૦૭-૨૦૨૬", salary: "રૂ. ૨૬,૦૦૦", requirements: ["ધોરણ ૧૨ માર્કશીટ", "શારીરિક કસોટી સર્ટિફિકેટ", "આધાર કાર્ડ"], tag: "પોલીસ ભરતી" },
+        { id: 102, title: "GSSSB જુનિયર ક્લાર્ક ભરતી", board: "GSSSB", totalJobs: "૫,૫૫૪ જગ્યાઓ", eligibility: "સ્નાતક (Graduate)", lastDate: "૨૫-૦૭-૨૦૨૬", salary: "રૂ. ૨૬,૦૦૦", requirements: ["સ્નાતક માર્કશીટ", "કોમ્પ્યુટર જ્ઞાન અંગેનું સર્ટિફિકેટ", "પાસપોર્ટ સાઇઝ ફોટો"], tag: "ગૌણ સેવા" }
+    ],
+    ca: [
+        { id: 301, title: "ગ્લોબલ ક્લીન એનર્જી કોન્ક્લેવ ૨૦૨૬", desc: "ગાંધીનગર ખાતે 2 લાખ કરોડના રોકાણ કરારો થયા. અક્ષય ઊર્જા ક્ષેત્રે ગુજરાત અગ્રેસર બનશે.", date: "૨૭-૦૫-૨૦૨૬", source: "ઉદ્યોગ વિભાગ" },
+        { id: 302, title: "ગુજરાત હાઇકોર્ટના નવા ન્યાયાધીશની વરણી", desc: "રાજ્યપાલશ્રીએ રાજભવન ખાતે નવનિયુક્ત જજને હોદ્દા અને ગુપ્તતાના શપથ લેવડાવ્યા.", date: "૨૪-૦૫-૨૦૨૬", source: "ન્યાય વિભાગ" }
+    ],
+    gk: [
+        { id: 401, question: "ગુજરાત રાજ્યના પ્રથમ મુખ્યમંત્રી કોણ હતા?", answer: "ડૉ. જીવરાજ મહેતા" },
+        { id: 402, question: "સરદાર સરોવર નર્મદા ડેમની કુલ ઉંચાઈ કેટલા મીટર છે?", answer: "૧૩૮.૬૮ મીટર" }
+    ],
+    pcstore: [
+        { id: 201, title: "HP ProBook Premium Laptop", specs: "Intel i5 | 8GB RAM | 256GB SSD", condition: "A++ ગ્રેડ", price: "રૂ. ૧૬,૫૦૦ /-", originalPrice: "રૂ. ૪૫,૦૦૦", warranty: "૬ મહિના વોરંટી", tag: "બેસ્ટ સેલર" },
+        { id: 202, title: "Dell Latitude Business Laptop", specs: "Intel Core i7 | 16GB RAM | 512GB SSD", condition: "હલકું વજન", price: "રૂ. ૨૧,૯૯૯ /-", originalPrice: "રૂ. ૬૨,૦૦૦", warranty: "૧ વર્ષ વોરંટી", tag: "પાવરફુલ PC" }
+    ]
+};
+
+// ===================== STATE =====================
+let db = {};
+let currentSection = 'dashboard';
+let editingType = null;
+let editingId = null;
+
+// ===================== INIT =====================
+function init() {
+    // Load from localStorage or use defaults
+    const saved = localStorage.getItem('sitaramAdminDB');
+    if (saved) {
+        try { db = JSON.parse(saved); } catch(e) { db = JSON.parse(JSON.stringify(DEFAULT_DATA)); }
+    } else {
+        db = JSON.parse(JSON.stringify(DEFAULT_DATA));
+    }
+}
+
+function save() {
+    localStorage.setItem('sitaramAdminDB', JSON.stringify(db));
+    renderDashboard();
+    renderSection(currentSection);
+}
+
+// ===================== LOGIN =====================
+function doLogin() {
+    const pass = document.getElementById('loginPass').value;
+    if (pass === ADMIN_PASSWORD) {
+        document.getElementById('loginScreen').classList.add('hidden');
+        document.getElementById('adminPanel').classList.remove('hidden');
+        document.getElementById('adminPanel').classList.add('flex');
+        init();
+        renderDashboard();
+        renderSection('dashboard');
+        showSection('dashboard');
+    } else {
+        document.getElementById('loginErr').classList.remove('hidden');
+        setTimeout(() => document.getElementById('loginErr').classList.add('hidden'), 2000);
+    }
+}
+
+function doLogout() {
+    document.getElementById('adminPanel').classList.add('hidden');
+    document.getElementById('loginScreen').classList.remove('hidden');
+    document.getElementById('loginPass').value = '';
+}
+
+// ===================== SECTIONS =====================
+function showSection(sec) {
+    currentSection = sec;
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.getElementById('sec-' + sec).classList.add('active');
+
+    // Sidebar
+    document.querySelectorAll('.sidebar-item').forEach(b => {
+        b.classList.remove('active', 'text-white', 'bg-blue-800');
+        b.classList.add('text-slate-600');
+    });
+    const sidebtns = document.querySelectorAll('.sidebar-item');
+    const secs = ['dashboard','catalog','bharti','ca','gk','pcstore'];
+    const idx = secs.indexOf(sec);
+    if (sidebtns[idx]) {
+        sidebtns[idx].classList.add('active');
+        sidebtns[idx].classList.remove('text-slate-600');
+    }
+
+    // Mobile nav
+    document.querySelectorAll('.mobile-nav').forEach(b => { b.classList.remove('text-blue-700'); b.classList.add('text-slate-400'); });
+    const mnBtns = document.querySelectorAll('.mobile-nav');
+    if (mnBtns[idx]) { mnBtns[idx].classList.remove('text-slate-400'); mnBtns[idx].classList.add('text-blue-700'); }
+
+    renderSection(sec);
+}
+
+function renderSection(sec) {
+    if (sec === 'dashboard') renderDashboard();
+    else if (sec === 'catalog') renderCatalogList();
+    else if (sec === 'bharti') renderBhartiList();
+    else if (sec === 'ca') renderCaList();
+    else if (sec === 'gk') renderGkList();
+    else if (sec === 'pcstore') renderPcList();
+}
+
+// ===================== DASHBOARD =====================
+function renderDashboard() {
+    const grid = document.getElementById('statsGrid');
+    const items = [
+        { label: 'સર્વિસ કેટેલોગ', count: (db.catalog||[]).length, icon: 'fa-list-ul', color: 'blue', sec: 'catalog' },
+        { label: 'ભરતીઓ', count: (db.bharti||[]).length, icon: 'fa-briefcase', color: 'red', sec: 'bharti' },
+        { label: 'કરંટ અફેર્સ', count: (db.ca||[]).length, icon: 'fa-newspaper', color: 'purple', sec: 'ca' },
+        { label: 'GK પ્રશ્નો', count: (db.gk||[]).length, icon: 'fa-circle-question', color: 'amber', sec: 'gk' },
+        { label: 'PC Products', count: (db.pcstore||[]).length, icon: 'fa-laptop', color: 'teal', sec: 'pcstore' },
+    ];
+    grid.innerHTML = items.map(i => `
+        <div onclick="showSection('${i.sec}')" class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm cursor-pointer hover:border-${i.color}-400 transition">
+            <div class="flex items-center justify-between mb-2">
+                <i class="fa-solid ${i.icon} text-${i.color}-600 text-xl"></i>
+                <span class="text-2xl font-black text-slate-900">${i.count}</span>
+            </div>
+            <p class="text-xs text-slate-500 font-semibold">${i.label}</p>
+        </div>`).join('');
+}
+
+// ===================== CATALOG =====================
+const categoryBadge = { Card: 'badge-card', Certificate: 'badge-cert', Govt: 'badge-govt', Ration: 'badge-ration' };
+
+function renderCatalogList() {
+    const el = document.getElementById('catalogList');
+    if (!db.catalog || !db.catalog.length) { el.innerHTML = emptyMsg(); return; }
+    el.innerHTML = db.catalog.map(item => `
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 flex justify-between items-start gap-3">
+            <div class="flex items-start gap-3 flex-1 min-w-0">
+                <span class="px-2.5 py-1 text-[10px] font-bold rounded-lg ${categoryBadge[item.category]||'bg-slate-200 text-slate-700'} shrink-0">${item.category}</span>
+                <div class="min-w-0">
+                    <h4 class="font-bold text-sm text-slate-900 truncate">${item.title}</h4>
+                    <p class="text-xs text-slate-400 mt-0.5">${item.company} · ${item.tag}</p>
+                </div>
+            </div>
+            <div class="flex space-x-2 shrink-0">
+                <button onclick="openModal('catalog', ${item.id})" class="h-8 w-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-100 transition text-xs"><i class="fa-solid fa-pen"></i></button>
+                <button onclick="deleteItem('catalog', ${item.id})" class="h-8 w-8 bg-red-50 text-red-500 rounded-lg flex items-center justify-center hover:bg-red-100 transition text-xs"><i class="fa-solid fa-trash"></i></button>
+            </div>
+        </div>`).join('');
+}
+
+// ===================== BHARTI =====================
+function renderBhartiList() {
+    const el = document.getElementById('bhartiList');
+    if (!db.bharti || !db.bharti.length) { el.innerHTML = emptyMsg(); return; }
+    el.innerHTML = db.bharti.map(item => `
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 flex justify-between items-start gap-3">
+            <div class="flex items-start gap-3 flex-1 min-w-0">
+                <span class="px-2.5 py-1 text-[10px] font-bold rounded-lg badge-bharti shrink-0">${item.board}</span>
+                <div class="min-w-0">
+                    <h4 class="font-bold text-sm text-slate-900 truncate">${item.title}</h4>
+                    <p class="text-xs text-slate-400 mt-0.5">છેલ્લી તારીખ: ${item.lastDate} · ${item.salary}</p>
+                </div>
+            </div>
+            <div class="flex space-x-2 shrink-0">
+                <button onclick="openModal('bharti', ${item.id})" class="h-8 w-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-100 text-xs"><i class="fa-solid fa-pen"></i></button>
+                <button onclick="deleteItem('bharti', ${item.id})" class="h-8 w-8 bg-red-50 text-red-500 rounded-lg flex items-center justify-center hover:bg-red-100 text-xs"><i class="fa-solid fa-trash"></i></button>
+            </div>
+        </div>`).join('');
+}
+
+// ===================== CA =====================
+function renderCaList() {
+    const el = document.getElementById('caList');
+    if (!db.ca || !db.ca.length) { el.innerHTML = emptyMsg(); return; }
+    el.innerHTML = db.ca.map(item => `
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 flex justify-between items-start gap-3">
+            <div class="flex items-start gap-3 flex-1 min-w-0">
+                <span class="px-2.5 py-1 text-[10px] font-bold rounded-lg badge-ca shrink-0">${item.date}</span>
+                <div class="min-w-0">
+                    <h4 class="font-bold text-sm text-slate-900 truncate">${item.title}</h4>
+                    <p class="text-xs text-slate-400 mt-0.5">${item.source}</p>
+                </div>
+            </div>
+            <div class="flex space-x-2 shrink-0">
+                <button onclick="openModal('ca', ${item.id})" class="h-8 w-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-100 text-xs"><i class="fa-solid fa-pen"></i></button>
+                <button onclick="deleteItem('ca', ${item.id})" class="h-8 w-8 bg-red-50 text-red-500 rounded-lg flex items-center justify-center hover:bg-red-100 text-xs"><i class="fa-solid fa-trash"></i></button>
+            </div>
+        </div>`).join('');
+}
+
+// ===================== GK =====================
+function renderGkList() {
+    const el = document.getElementById('gkList');
+    if (!db.gk || !db.gk.length) { el.innerHTML = emptyMsg(); return; }
+    el.innerHTML = db.gk.map(item => `
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 flex justify-between items-start gap-3">
+            <div class="flex-1 min-w-0">
+                <p class="font-semibold text-sm text-slate-900"><span class="text-amber-500 font-bold mr-1">Q:</span>${item.question}</p>
+                <p class="text-xs text-emerald-700 mt-1 font-semibold bg-emerald-50 px-2 py-0.5 rounded-lg inline-block mt-1.5">✓ ${item.answer}</p>
+            </div>
+            <div class="flex space-x-2 shrink-0">
+                <button onclick="openModal('gk', ${item.id})" class="h-8 w-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-100 text-xs"><i class="fa-solid fa-pen"></i></button>
+                <button onclick="deleteItem('gk', ${item.id})" class="h-8 w-8 bg-red-50 text-red-500 rounded-lg flex items-center justify-center hover:bg-red-100 text-xs"><i class="fa-solid fa-trash"></i></button>
+            </div>
+        </div>`).join('');
+}
+
+// ===================== PC STORE =====================
+function renderPcList() {
+    const el = document.getElementById('pcList');
+    if (!db.pcstore || !db.pcstore.length) { el.innerHTML = emptyMsg(); return; }
+    el.innerHTML = db.pcstore.map(item => `
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 flex justify-between items-start gap-3">
+            <div class="flex items-start gap-3 flex-1 min-w-0">
+                <span class="px-2.5 py-1 text-[10px] font-bold rounded-lg badge-pc shrink-0">${item.tag}</span>
+                <div class="min-w-0">
+                    <h4 class="font-bold text-sm text-slate-900 truncate">${item.title}</h4>
+                    <p class="text-xs text-slate-400 mt-0.5">${item.price} · ${item.warranty}</p>
+                </div>
+            </div>
+            <div class="flex space-x-2 shrink-0">
+                <button onclick="openModal('pcstore', ${item.id})" class="h-8 w-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-100 text-xs"><i class="fa-solid fa-pen"></i></button>
+                <button onclick="deleteItem('pcstore', ${item.id})" class="h-8 w-8 bg-red-50 text-red-500 rounded-lg flex items-center justify-center hover:bg-red-100 text-xs"><i class="fa-solid fa-trash"></i></button>
+            </div>
+        </div>`).join('');
+}
+
+// ===================== MODAL =====================
+function openModal(type, id) {
+    editingType = type;
+    editingId = id;
+    const item = id ? db[type].find(i => i.id === id) : null;
+    const modal = document.getElementById('editModal');
+    const titleMap = { catalog: 'સર્વિસ', bharti: 'ભરતી', ca: 'ન્યૂઝ', gk: 'GK પ્રશ્ન', pcstore: 'PC Product' };
+    document.getElementById('modalTitle').textContent = (id ? 'ફેરફાર — ' : 'નવો — ') + titleMap[type];
+
+    let html = '';
+    if (type === 'catalog') {
+        html = fields([
+            { id:'title', label:'શીર્ષક (Title)', val: item?.title||'' },
+            { id:'company', label:'Company / Portal', val: item?.company||'' },
+            { id:'type', label:'Type (ગુજરાતી)', val: item?.type||'' },
+            { id:'tag', label:'Tag', val: item?.tag||'' },
+            { id:'category', label:'Category', type:'select', options:['Card','Certificate','Govt','Ration'], val: item?.category||'Card' },
+            { id:'badge', label:'Badge Class (Tailwind)', val: item?.badge||'bg-blue-600 text-white' },
+            { id:'benefit', label:'ફાયદો (Benefit)', type:'textarea', val: item?.benefit||'' },
+            { id:'documents', label:'દસ્તાવેજો (એક પ્રતિ લાઇન)', type:'textarea', val: (item?.documents||[]).join('\n') },
+        ]);
+    } else if (type === 'bharti') {
+        html = fields([
+            { id:'title', label:'ભરતીનું નામ', val: item?.title||'' },
+            { id:'board', label:'Board / Organization', val: item?.board||'' },
+            { id:'totalJobs', label:'કુલ જગ્યાઓ', val: item?.totalJobs||'' },
+            { id:'eligibility', label:'લાયકાત', val: item?.eligibility||'' },
+            { id:'lastDate', label:'છેલ્લી તારીખ (DD-MM-YYYY)', val: item?.lastDate||'' },
+            { id:'salary', label:'પગાર', val: item?.salary||'' },
+            { id:'tag', label:'Tag', val: item?.tag||'' },
+            { id:'requirements', label:'જરૂરી દસ્તાવેજો (એક પ્રતિ લાઇન)', type:'textarea', val: (item?.requirements||[]).join('\n') },
+        ]);
+    } else if (type === 'ca') {
+        html = fields([
+            { id:'title', label:'ન્યૂઝ શીર્ષક', val: item?.title||'' },
+            { id:'desc', label:'વર્ણન (Description)', type:'textarea', val: item?.desc||'' },
+            { id:'date', label:'તારીખ', val: item?.date||'' },
+            { id:'source', label:'Source', val: item?.source||'' },
+        ]);
+    } else if (type === 'gk') {
+        html = fields([
+            { id:'question', label:'પ્રશ્ન (Question)', type:'textarea', val: item?.question||'' },
+            { id:'answer', label:'જવાબ (Answer)', val: item?.answer||'' },
+        ]);
+    } else if (type === 'pcstore') {
+        html = fields([
+            { id:'title', label:'Product નામ', val: item?.title||'' },
+            { id:'specs', label:'Specifications', val: item?.specs||'' },
+            { id:'condition', label:'Condition', val: item?.condition||'' },
+            { id:'price', label:'કિંમત', val: item?.price||'' },
+            { id:'originalPrice', label:'Original Price', val: item?.originalPrice||'' },
+            { id:'warranty', label:'Warranty', val: item?.warranty||'' },
+            { id:'tag', label:'Tag', val: item?.tag||'' },
+        ]);
+        const existingPhoto = item?.photo || '';
+        html += `<div>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5"><i class="fa-solid fa-image text-teal-600 mr-1"></i> Product ફોટો (વૈકલ્પિક)</label>
+            <div class="flex items-center space-x-4">
+                <input type="file" id="ef_photoFile" accept="image/*" class="hidden" onchange="handlePcPhotoUpload(event)">
+                <button type="button" onclick="document.getElementById('ef_photoFile').click()" class="px-4 py-2.5 bg-teal-50 hover:bg-teal-100 border border-teal-200 rounded-xl text-xs font-bold text-teal-700"><i class="fa-solid fa-camera mr-2"></i> ફોટો પસંદ કરો</button>
+                <div id="pcPhotoPreviewWrap" class="h-14 w-14 border border-slate-200 rounded-xl overflow-hidden shrink-0 ${existingPhoto ? '' : 'hidden'}">
+                    <img id="pcPhotoPreviewImg" src="${existingPhoto}" class="h-full w-full object-cover">
+                </div>
+            </div>
+            <input type="hidden" id="ef_photo" value="${existingPhoto}">
+        </div>`;
+    }
+    document.getElementById('modalForm').innerHTML = html;
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function fields(arr) {
+    return arr.map(f => `
+        <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5">${f.label}</label>
+            ${f.type === 'textarea'
+                ? `<textarea id="ef_${f.id}" rows="3" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm resize-none">${f.val}</textarea>`
+                : f.type === 'select'
+                ? `<select id="ef_${f.id}" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm bg-white">${f.options.map(o=>`<option value="${o}" ${f.val===o?'selected':''}>${o}</option>`).join('')}</select>`
+                : `<input type="text" id="ef_${f.id}" value="${(f.val||'').replace(/"/g,'&quot;')}" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm">`
+            }
+        </div>`).join('');
+}
+
+function gv(id) { const el = document.getElementById('ef_'+id); return el ? el.value.trim() : ''; }
+
+function saveItem() {
+    const type = editingType;
+    let item = {};
+
+    if (type === 'catalog') {
+        item = { id: editingId || nextId(type), title: gv('title'), company: gv('company'), category: gv('category'), type: gv('type'), benefit: gv('benefit'), documents: gv('documents').split('\n').filter(Boolean), tag: gv('tag'), badge: gv('badge') };
+    } else if (type === 'bharti') {
+        item = { id: editingId || nextId(type), title: gv('title'), board: gv('board'), totalJobs: gv('totalJobs'), eligibility: gv('eligibility'), lastDate: gv('lastDate'), salary: gv('salary'), requirements: gv('requirements').split('\n').filter(Boolean), tag: gv('tag') };
+    } else if (type === 'ca') {
+        item = { id: editingId || nextId(type), title: gv('title'), desc: gv('desc'), date: gv('date'), source: gv('source') };
+    } else if (type === 'gk') {
+        item = { id: editingId || nextId(type), question: gv('question'), answer: gv('answer') };
+    } else if (type === 'pcstore') {
+        item = { id: editingId || nextId(type), title: gv('title'), specs: gv('specs'), condition: gv('condition'), price: gv('price'), originalPrice: gv('originalPrice'), warranty: gv('warranty'), tag: gv('tag'), photo: gv('photo') };
+    }
+
+    if (editingId) {
+        const idx = db[type].findIndex(i => i.id === editingId);
+        if (idx >= 0) db[type][idx] = item;
+    } else {
+        db[type].push(item);
+    }
+
+    save();
+    closeModal();
+    showToast('✅ સફળતાપૂર્વક સાચવ્યું!');
+}
+
+function nextId(type) {
+    const existing = db[type].map(i => i.id);
+    return existing.length ? Math.max(...existing) + 1 : 1;
+}
+
+function closeModal() {
+    const modal = document.getElementById('editModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
+function deleteItem(type, id) {
+    if (!confirm('શું ખરેખર delete કરવું છે?')) return;
+    db[type] = db[type].filter(i => i.id !== id);
+    save();
+    renderSection(currentSection);
+    showToast('🗑️ Delete થઈ ગયું.');
+}
+
+// ===================== EXPORT =====================
+function exportData() {
+    const indent = (arr) => JSON.stringify(arr, null, 4).replace(/^/gm, '    ').trim();
+    const docStr = (arr) => arr.map(d => `"${d}"`).join(', ');
+
+    let js = `// ============================================================\n//  SITARAM ONLINE — BACKEND DATA FILE (Admin Panel Export)\n//  Generated: ${new Date().toLocaleString('gu-IN')}\n// ============================================================\n\n`;
+
+    // catalog
+    js += `const sitaramCatalogData = [\n`;
+    js += db.catalog.map(i => `    {\n        id: ${i.id},\n        title: "${i.title}",\n        company: "${i.company}",\n        category: "${i.category}",\n        type: "${i.type}",\n        benefit: "${i.benefit.replace(/"/g,'\\"')}",\n        documents: [${i.documents.map(d=>`"${d}"`).join(', ')}],\n        tag: "${i.tag}",\n        badge: "${i.badge}"\n    }`).join(',\n');
+    js += `\n];\n\n`;
+
+    // bharti
+    js += `const sitaramBhartiData = [\n`;
+    js += db.bharti.map(i => `    {\n        id: ${i.id},\n        title: "${i.title}",\n        board: "${i.board}",\n        totalJobs: "${i.totalJobs}",\n        eligibility: "${i.eligibility}",\n        lastDate: "${i.lastDate}",\n        salary: "${i.salary}",\n        requirements: [${i.requirements.map(d=>`"${d}"`).join(', ')}],\n        tag: "${i.tag}"\n    }`).join(',\n');
+    js += `\n];\n\n`;
+
+    // ca
+    js += `const sitaramCaData = [\n`;
+    js += db.ca.map(i => `    {\n        id: ${i.id},\n        title: "${i.title}",\n        desc: "${i.desc.replace(/"/g,'\\"')}",\n        date: "${i.date}",\n        source: "${i.source}"\n    }`).join(',\n');
+    js += `\n];\n\n`;
+
+    // gk
+    js += `const sitaramGkData = [\n`;
+    js += db.gk.map(i => `    {\n        id: ${i.id},\n        question: "${i.question.replace(/"/g,'\\"')}",\n        answer: "${i.answer.replace(/"/g,'\\"')}"\n    }`).join(',\n');
+    js += `\n];\n\n`;
+
+    // pcstore
+    js += `const sitaramPcStoreData = [\n`;
+    js += db.pcstore.map(i => `    {\n        id: ${i.id},\n        title: "${i.title}",\n        specs: "${i.specs}",\n        condition: "${i.condition}",\n        price: "${i.price}",\n        originalPrice: "${i.originalPrice}",\n        warranty: "${i.warranty}",\n        tag: "${i.tag}",\n        photo: "${i.photo||''}"\n    }`).join(',\n');
+    js += `\n];\n`;
+
+    // Download
+    const blob = new Blob([js], { type: 'text/javascript;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'sitaram_data.js'; a.click();
+    URL.revokeObjectURL(url);
+    showToast('📥 sitaram_data.js download થઈ ગઈ!');
+}
+
+// ===================== HELPERS =====================
+function emptyMsg() { return `<div class="text-center py-10 text-slate-400"><i class="fa-solid fa-inbox text-4xl mb-3"></i><p class="text-sm">કોઈ item નથી. "નવી ઉમેરો" થી ઉમેરો.</p></div>`; }
+
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.opacity = '1';
+    setTimeout(() => { t.style.opacity = '0'; }, 2500);
+}
+
+// ===================== PC PHOTO UPLOAD =====================
+function handlePcPhotoUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        document.getElementById('ef_photo').value = e.target.result;
+        document.getElementById('pcPhotoPreviewImg').src = e.target.result;
+        document.getElementById('pcPhotoPreviewWrap').classList.remove('hidden');
+        showToast('📷 ફોટો અપલોડ થયો!');
+    };
+    reader.readAsDataURL(file);
+}
+
+// Close modal on overlay click
+document.getElementById('editModal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>
